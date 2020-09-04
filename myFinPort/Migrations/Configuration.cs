@@ -3,6 +3,7 @@ namespace myFinPort.Migrations
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using myFinPort.Helpers;
+    using myFinPort.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -23,9 +24,12 @@ namespace myFinPort.Migrations
             //  to avoid creating duplicate seed data.
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
             SeedHelper seedHelper = new SeedHelper(context);
             seedHelper.SeedRoles(roleManager);
+            // I've got to make sure this is right before I actually call it
+            //seedHelper.SeedDemoUsers(userManager);
         }
     }
 }

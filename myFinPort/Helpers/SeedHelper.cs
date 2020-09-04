@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 
 namespace myFinPort.Helpers
 {
@@ -45,6 +46,80 @@ namespace myFinPort.Helpers
 
             db.SaveChanges();
         }
+
+        // May not need this, or it has to be more robust.
+        // reason?  Because when someone registers, they must create a household (is that right?)
+        public void SeedDemoUsers(UserManager<ApplicationUser> um)
+        {
+            string demoEmail = "";
+            string demoPassword = "";
+
+            // set up a demo administrator
+            demoEmail = WebConfigurationManager.AppSettings["AdminDemoEmail"];
+            demoPassword = WebConfigurationManager.AppSettings["DemoPassword"];
+            var avatar = WebConfigurationManager.AppSettings["DefaultAvatarPath"];
+
+            if (!db.Users.Any(u => u.Email == demoEmail))
+            {
+                um.Create(new ApplicationUser()
+                {
+                    Email = demoEmail,
+                    UserName = demoEmail,
+                    FirstName = "Demo",
+                    LastName = "Admin",
+                    AvatarPath = avatar
+                }, demoPassword);
+
+                // grab the Id that just created by adding the above user
+                var userId = um.FindByEmail(demoEmail).Id;
+
+                // now that I have created a user I want to assign the person to the specific role
+                um.AddToRole(userId, "Admin");
+            }
+
+            // set up a demo project manager
+            demoEmail = WebConfigurationManager.AppSettings["HeadDemoEmail"];
+            if (!db.Users.Any(u => u.Email == demoEmail))
+            {
+                um.Create(new ApplicationUser()
+                {
+                    Email = demoEmail,
+                    UserName = demoEmail,
+                    FirstName = "Demo",
+                    LastName = "Head",
+                    AvatarPath = avatar
+                }, demoPassword);
+
+                // grab the Id that just created by adding the above user
+                var userId = um.FindByEmail(demoEmail).Id;
+
+                // now that I have created a user I want to assign the person to the specific role
+                um.AddToRole(userId, "Head");
+            }
+
+            // set up a demo developer
+            demoEmail = WebConfigurationManager.AppSettings["MemberDemoEmail"];
+            if (!db.Users.Any(u => u.Email == demoEmail))
+            {
+                um.Create(new ApplicationUser()
+                {
+                    Email = demoEmail,
+                    UserName = demoEmail,
+                    FirstName = "Demo",
+                    LastName = "Member",
+                    AvatarPath = avatar
+                }, demoPassword);
+
+                // grab the Id that just created by adding the above user
+                var userId = um.FindByEmail(demoEmail).Id;
+
+                // now that I have created a user I want to assign the person to the specific role
+                um.AddToRole(userId, "Member");
+            }
+
+            db.SaveChanges();
+        }
+
 
 
     }

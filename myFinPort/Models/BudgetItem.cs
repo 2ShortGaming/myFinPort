@@ -34,6 +34,7 @@ namespace myFinPort.Models
         {
             Transactions = new HashSet<Transaction>();
             Created = DateTime.Now;
+            CurrentAmount = 0;
         }
     }
 }

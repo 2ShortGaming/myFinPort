@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using myFinPort.Extensions;
 using myFinPort.Helpers;
 using myFinPort.Models;
+using myFinPort.ViewModels;
 
 namespace myFinPort.Controllers
 {
@@ -52,6 +53,7 @@ namespace myFinPort.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "New User")]
         public async Task<ActionResult> Create([Bind(Include = "Id,HouseholdName,Greeting")] Household household)
         {
             if (ModelState.IsValid)
@@ -67,11 +69,54 @@ namespace myFinPort.Controllers
 
                 await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ConfigureHouse");
             }
 
             return View(household);
         }
+
+        [HttpGet]
+        //[Authorize(Roles = "Head")]
+        public ActionResult ConfigureHouse()
+        {
+            var model = new ConfigureHouseVM();
+            model.HouseholdId = User.Identity.GetHouseholdId();
+            if(model.HouseholdId == null)
+            {
+                // this is the fail case
+                return RedirectToAction("Create");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfigureHouse(ConfigureHouseVM model)
+        {
+            var bankAccount = new BankAccount(model.BankAccount.StartingBalance, model.BankAccount.WarningBalance, model.BankAccount.AccountName);
+            bankAccount.AccountType = model.BankAccount.AccountType;
+            db.BankAccounts.Add(bankAccount);
+
+            var budget = new Budget();
+            budget.HouseholdId = (int)model.HouseholdId;
+            budget.BudgetName = model.Budget.BudgetName;
+            db.Budgets.Add(budget);
+            db.SaveChanges();
+
+            var budgetItem = new BudgetItem();
+            budgetItem.BudgetId = budget.Id;
+            budgetItem.TargetAmount = model.BudgetItem.TargetAmount;
+            budgetItem.ItemName = model.BudgetItem.ItemName;
+            db.BudgetItems.Add(budgetItem);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
 
         // GET: Households/Edit/5
         public ActionResult Edit(int? id)
