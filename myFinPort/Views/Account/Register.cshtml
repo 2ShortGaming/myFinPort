@@ -65,46 +65,59 @@
                 </div>
               </div>
 
+              <p class="text-info">*Required field</p>
+              @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+
               <!-- FirstName field -->
               <div class="form-group">
+                <div class="col-12">
+                  @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name*" })
+                  @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                </div>
+              </div>
+              @*<div class="form-group">
                 <div class="col-xs-12">
                   <input class="form-control" type="text" required="" placeholder="First Name">
                 </div>
-              </div>
+              </div>*@
 
               <!-- LastName field -->
               <div class="form-group">
-                <div class="col-xs-12">
-                  <input class="form-control" type="text" required="" placeholder="Last Name">
+                <div class="col-12">
+                  @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name*" })
+                  @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                 </div>
               </div>
 
               <!-- Avatar Field -->
               <div class="form-group">
-                @Html.Label("Personal Avatar", new { @class = "col-10 control-label" })
-                <div class="col-xs-10">
+                @Html.Label("Personal Avatar", new { @class = "col-10 control-label mb-1" })
+                <div class="col-12">
                   @Html.TextBoxFor(m => m.Avatar, new { type = "file" })
                 </div>
               </div>
 
               <!-- Email field -->
               <div class="form-group ">
-                <div class="col-xs-12">
-                  <input class="form-control" type="text" required="" placeholder="Email">
+                <div class="col-12">
+                  @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email*", type = "email" })
+                  @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
               </div>
 
               <!-- Password field -->
               <div class="form-group ">
-                <div class="col-xs-12">
-                  <input class="form-control" type="password" required="" placeholder="Password">
+                <div class="col-12">
+                  @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password*", type = "password" })
+                  @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 </div>
               </div>
 
               <!-- Confirm Password field -->
               <div class="form-group">
-                <div class="col-xs-12">
-                  <input class="form-control" type="password" required="" placeholder="Confirm Password">
+                <div class="col-12">
+                  @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password*", type = "password" })
+                  @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
                 </div>
               </div>
 

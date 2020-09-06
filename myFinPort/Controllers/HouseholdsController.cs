@@ -94,7 +94,14 @@ namespace myFinPort.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfigureHouse(ConfigureHouseVM model)
         {
-            var bankAccount = new BankAccount(model.BankAccount.StartingBalance, model.BankAccount.WarningBalance, model.BankAccount.AccountName);
+            // Create the bank account(s)
+            var bankAccount = new BankAccount
+                (
+                    model.StartingBalance,
+                    model.BankAccount.WarningBalance,
+                    model.BankAccount.AccountName
+                );
+
             bankAccount.AccountType = model.BankAccount.AccountType;
             db.BankAccounts.Add(bankAccount);
 
