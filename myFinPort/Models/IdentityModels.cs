@@ -57,14 +57,15 @@ namespace myFinPort.Models
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            var hhId = HouseholdId != null ? HouseholdId.ToString() : "";
 
+            // Adding custom user claims
+            var hhId = HouseholdId != null ? HouseholdId.ToString() : "";
             userIdentity.AddClaim(new Claim("HouseholdId", hhId));
             userIdentity.AddClaim(new Claim("FullName", FullName));
             userIdentity.AddClaim(new Claim("AvatarPath", AvatarPath));
 
 
-            // Add custom user claims here
+            
             return userIdentity;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -95,6 +96,14 @@ namespace myFinPort.Models
         public string LastName { get; set; }
 
         public HttpPostedFileBase Avatar { get; set; }
+    }
+
+    public class AcceptInvitationVM : ExtendedRegisterViewModel
+    {
+        // the primary key of the invitation
+        public int InvitationId { get; set; }
+        public Guid Code { get; set; }
+        public int HouseholdId { get; set; }
     }
 
     public class ResetPasswordViewModel

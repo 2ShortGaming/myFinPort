@@ -181,12 +181,18 @@
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="Extensions\AuthorizeExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
+    <Compile Include="Extensions\InvitationExtensions.cs" />
+    <Compile Include="Extensions\TransactionExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BankAccountsHelper.cs" />
+    <Compile Include="Helpers\BudgetsHelper.cs" />
     <Compile Include="Helpers\FileStamp.cs" />
     <Compile Include="Helpers\FileUploadValidator.cs" />
+    <Compile Include="Helpers\HouseholdHelper.cs" />
     <Compile Include="Helpers\ImageUploadValidator.cs" />
+    <Compile Include="Helpers\InvitationHelper.cs" />
     <Compile Include="Helpers\SeedHelper.cs" />
     <Compile Include="Helpers\SlugMaker.cs" />
     <Compile Include="Helpers\StringUtilities.cs" />
@@ -206,6 +212,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BankAccountWizardVM.cs" />
     <Compile Include="ViewModels\BudgetWizardVM.cs" />
+    <Compile Include="ViewModels\BuildHouseWizardVM.cs" />
     <Compile Include="ViewModels\ConfigureHouseVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -333,10 +340,13 @@
     <Content Include="Content\square\yellow.css" />
     <Content Include="Content\square\yellow.png" />
     <Content Include="Content\square\_all.css" />
+    <Content Include="Content\steps.css" />
     <Content Include="Content\style.css" />
+    <Content Include="Content\sweetalert.css" />
     <Content Include="Content\themify-icons.css" />
     <Content Include="Content\weather-icons.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="favicon.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\themify.svg" />
     <Content Include="Global.asax" />
@@ -358,12 +368,17 @@
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.slimscroll.js" />
     <Content Include="Scripts\jquery.sparkline.min.js" />
+    <Content Include="Scripts\jquery.steps.min.js" />
     <Content Include="Scripts\jQuery.style.switcher.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\morris.min.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\raphael-min.js" />
     <Content Include="Scripts\sidebarmenu.js" />
+    <Content Include="Scripts\steps.js" />
     <Content Include="Scripts\sticky-kit.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\waves.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -378,7 +393,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -454,6 +469,10 @@
     <Content Include="fonts\themify.woff" />
     <None Include="packages.config" />
     <Content Include="Views\Households\ConfigureHouse.cshtml" />
+    <Content Include="Views\Households\BuildHouse.cshtml" />
+    <Content Include="Private.config" />
+    <Content Include="Views\Households\Members.cshtml" />
+    <Content Include="Views\Account\AcceptInvitation.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

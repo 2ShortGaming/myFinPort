@@ -4,55 +4,56 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
+<div class="container">
+  <h2>Details</h2>
+  <div>
     <h4>Budget</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Household.HouseholdName)
-        </dt>
+      <dt>
+        @Html.DisplayNameFor(model => model.Household.HouseholdName)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Household.HouseholdName)
-        </dd>
+      <dd>
+        @Html.DisplayFor(model => model.Household.HouseholdName)
+      </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Owner.Email)
-        </dt>
+      <dt>
+        @Html.DisplayNameFor(model => model.Owner.Email)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Owner.Email)
-        </dd>
+      <dd>
+        @Html.DisplayFor(model => model.Owner.Email)
+      </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+      <dt>
+        @Html.DisplayNameFor(model => model.Created)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+      <dd>
+        @Html.DisplayFor(model => model.Created)
+      </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.BudgetName)
-        </dt>
+      <dt>
+        @Html.DisplayNameFor(model => model.BudgetName)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.BudgetName)
-        </dd>
+      <dd>
+        @Html.DisplayFor(model => model.BudgetName)
+      </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CurrentAmount)
-        </dt>
+      <dt>
+        @Html.DisplayNameFor(model => model.CurrentAmount)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CurrentAmount)
-        </dd>
+      <dd>
+        @Html.DisplayFor(model => model.CurrentAmount)
+      </dd>
 
     </dl>
-</div>
-<p>
+  </div>
+  <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+  </p>
+</div>

@@ -4289,13 +4289,14 @@ table.dataTable thead .sorting:after {
     display: table
 }
 
-.vtabs .tabs-vertical {
-    width: 150px;
-    border-bottom: 0px;
-    border-right: 1px solid rgba(120, 130, 140, 0.13);
-    display: table-cell;
-    vertical-align: top
-}
+    .vtabs .tabs-vertical {
+        /*width: 150px;*/
+        /*width: 20%;*/
+        border-bottom: 0px;
+        border-right: 1px solid rgba(120, 130, 140, 0.13);
+        display: table-cell;
+        vertical-align: top
+    }
 
 .vtabs .tabs-vertical li .nav-link {
     color: #263238;
@@ -4305,6 +4306,7 @@ table.dataTable thead .sorting:after {
 }
 
 .vtabs .tab-content {
+    /*width: 80%;*/
     display: table-cell;
     padding: 20px;
     vertical-align: top

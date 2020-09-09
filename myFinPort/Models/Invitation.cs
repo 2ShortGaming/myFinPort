@@ -38,5 +38,13 @@ namespace myFinPort.Models
             TTL = 7;  // invitation is valid for seven days.
         }
 
+        public Invitation(int hhId)
+        {
+            Created = DateTime.Now;
+            IsValid = true;
+            TTL = 7;  // invitation is valid for seven days.
+            HouseholdId = hhId;
+        }
+
     }
 }

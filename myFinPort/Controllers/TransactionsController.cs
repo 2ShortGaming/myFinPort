@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using myFinPort.Extensions;
 using myFinPort.Models;
 
 namespace myFinPort.Controllers
@@ -56,6 +57,10 @@ namespace myFinPort.Controllers
             {
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
+
+                var thisTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == transaction.Id);
+                thisTransaction.UpdateBalances();
+
                 return RedirectToAction("Index");
             }
 
@@ -92,8 +97,13 @@ namespace myFinPort.Controllers
         {
             if (ModelState.IsValid)
             {
+                var oldTransaction = db.Transactions.AsNoTracking(); // this is a hint, not complete line of code
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
+
+                //var newTransaction = db.Transactions.AsNoTracking();
+                /*newTransaction.EditTransaction(oldTransaction);*/  // this is a hint, not complete line of code
+
                 return RedirectToAction("Index");
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);

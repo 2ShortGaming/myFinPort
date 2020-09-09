@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using myFinPort.Extensions;
 using myFinPort.Models;
 
 namespace myFinPort.Controllers
@@ -14,33 +16,20 @@ namespace myFinPort.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Invitations
-        public ActionResult Index()
-        {
-            var invitations = db.Invitations.Include(i => i.Household);
-            return View(invitations.ToList());
-        }
-
-        // GET: Invitations/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Invitation invitation = db.Invitations.Find(id);
-            if (invitation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(invitation);
-        }
-
         // GET: Invitations/Create
+        [Authorize(Roles = "Head")]
         public ActionResult Create()
         {
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "HouseholdName");
-            return View();
+            var hhId = User.Identity.GetHouseholdId();
+
+            if (hhId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var invitation = new Invitation((int)hhId);
+
+            return View(invitation);
         }
 
         // POST: Invitations/Create
@@ -59,6 +48,36 @@ namespace myFinPort.Controllers
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "HouseholdName", invitation.HouseholdId);
             return View(invitation);
+        }
+
+        // POST: SendInvitation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateInvitation(string recipientEmail)
+        {
+            if (!string.IsNullOrEmpty(recipientEmail))
+            {
+                var hhId = User.Identity.GetHouseholdId();
+
+                if (hhId == 0)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var newInvitation = new Invitation((int)hhId);
+
+                newInvitation.RecipientEmail = recipientEmail;
+                newInvitation.Code = Guid.NewGuid();
+
+                db.Invitations.Add(newInvitation);
+                db.SaveChanges();
+
+                // now send the invitation email
+                await newInvitation.SendInvitation();
+
+
+            }
+            return RedirectToAction("Dashboard", "Home");
         }
 
         // GET: Invitations/Edit/5

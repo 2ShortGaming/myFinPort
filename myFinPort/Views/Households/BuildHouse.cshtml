@@ -1,0 +1,253 @@
+﻿@model myFinPort.ViewModels.BuildHouseWizardVM
+
+@{
+  ViewBag.Title = "Build Household";
+}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body wizard-content">
+          <h4 class="card-title">Your Financial Household</h4>
+          @using (Html.BeginForm("BuildHouse", "Households", FormMethod.Post, new { @class = "tab-wizard wizard-circle" }))
+          {
+            @Html.AntiForgeryToken()
+
+            <!-- Step 1 - Household settings -->
+            <h6>Household</h6>
+            <section>
+              <div class="row">
+                <div class="col-6">
+                  <!-- Household Name -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.Household.HouseholdName, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.Household.HouseholdName, new { htmlAttributes = new { @class = "form-control", id = "hhName" } })
+                      @Html.ValidationMessageFor(model => model.Household.HouseholdName, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+
+                  <!-- Household Greeting -->
+                  <div class="col-12">
+                    @Html.LabelFor(model => model.Household.Greeting, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Household.Greeting, new { htmlAttributes = new { @class = "form-control", id = "hhGreeting" } })
+                    @Html.ValidationMessageFor(model => model.Household.Greeting, "", new { @class = "text-danger" })
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <div class="card-title">
+                        <h4>Household Setup</h4>
+                      </div>
+                      <p>
+                        The household is the primary component of myFinPort.
+                        You may be the only one in your household.  Or, you may have many household members.
+                        However, you and each of your members may belong to only one household.
+                      </p>
+                      <p>
+                        <span class="text-purple">Name</span> - Type in the name of your household.
+                      </p>
+                      <p>
+                        <span class="text-purple">Greeting</span> - This greeting will be presented to your
+                        members when they log in.
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 2 - Bank Accounts -->
+            <h6>Bank Accounts</h6>
+            <section>
+              <div class="row">
+                <!-- Bank Account Name -->
+                <div class="col-6">
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.BankAccount.AccountName, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.BankAccount.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.BankAccount.AccountName, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+
+                  <!-- Bank Account Type -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.BankAccount.AccountType, htmlAttributes: new { @class = "control-label" })
+                      @Html.EnumDropDownListFor(model => model.BankAccount.AccountType, htmlAttributes: new { @class = "form-control" })
+                      @Html.ValidationMessageFor(model => model.BankAccount.AccountType, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+
+                  <!-- Current Balance -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.StartingBalance, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.StartingBalance, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.StartingBalance, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+
+                  <!-- Warning Balance -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.BankAccount.WarningBalance, htmlAttributes: new { @class = "control-label" })
+
+                      @Html.EditorFor(model => model.BankAccount.WarningBalance, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.BankAccount.WarningBalance, "", new { @class = "text-danger" })
+
+                    </div>
+                  </div>
+
+                  <!-- Is Personal Account? -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      <div class="check red">
+                        <input type="checkbox" name="isPersonalAccount" value="true" id="isPersonalAccount">
+                        <label for="isPersonalAccount"><span class="ml-1 text-danger">Personal Account?</span> </label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-6">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <div class="card-title">
+                        <h4>Bank Account Setup</h4>
+                      </div>
+                      <p class="text-purple">
+                        Only create one bank account for now.
+                      </p>
+                      <p>
+                        You will probably want more than one bank account, but you can do that later.
+                        When you're ready, you may decide to add additional checking or savings accounts.
+                      </p>
+                      <p>
+                        <span class="text-purple">Account Name</span> - Type in the name of your account.
+                      </p>
+                      <p>
+                        <span class="text-purple">Account Type</span> - Select the type of account you are
+                        creating from the drop list.
+                      </p>
+                      <p>
+                        <span class="text-purple">Starting Balance</span> - The account you are creating may already
+                        have a balance.  Enter the starting balance here.
+                      </p>
+                      <p>
+                        <span class="text-purple">Warning Amount</span> - This is an amount below which you
+                        would like to be alerted, so you can avoid over drafting your account.
+                      </p>
+                      <p>
+                        <span class="text-danger">Personal Account</span> - By default, all accounts belong to the
+                        household.  Personal Accounts are presented differently.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 3 - Budget -->
+            <h6>Budget</h6>
+            <section>
+              <div class="row">
+                <div class="col-6">
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.Budget.BudgetName, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.Budget.BudgetName, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.Budget.BudgetName, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <div class="card-title">
+                        <h4>Budget Setup</h4>
+                      </div>
+                      <p class="text-purple">
+                        Only create one budget for now.
+                      </p>
+                      <p>
+                        If you are like most people, you will have more than one budget.
+                        After you finish this initial set up, you can add additional budgets.
+                      </p>
+
+                      <p>
+                        You can think of a budget as a bucket, or a category of expenses.  Some examples would be
+                        Utilities, Food, or Entertainment.
+                      </p>
+                      <p>
+                        <span class="text-purple">Budget Name</span> - Type in the name of your budget.
+                      </p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 4 -->
+            <h6>Budget Items</h6>
+            <section>
+              <div class="row">
+                <div class="col-6">
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.BudgetItem.ItemName, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.BudgetItem.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.BudgetItem.ItemName, "", new { @class = "text-danger" })
+                    </div>
+
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      @Html.LabelFor(model => model.BudgetItem.TargetAmount, htmlAttributes: new { @class = "control-label" })
+                      @Html.EditorFor(model => model.BudgetItem.TargetAmount, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.BudgetItem.TargetAmount, "", new { @class = "text-danger" })
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <div class="card-title">
+                        <h4>Budget Item Setup</h4>
+                      </div>
+                      <p class="text-purple">
+                        In the previous step you set up a Budget.  Now, set up one budget item for that budget.
+                      </p>
+                      <p>
+                        As in previous steps, you will be able to set up more budget items
+                        after you have finish this initial set up.
+                      </p>
+                      <p>
+                        A budget item is something you spend money on.  If you are thinking of your Utilities budget,
+                        you might have a budget item called Electric Bill, Gas Bill and Water Bill.
+                      </p>
+                      <p>
+                        <span class="text-purple">Budget Item Name</span> - Type in the name of your budget item.
+                      </p>
+                      <p>
+                        <span class="text-purple">Target Amount</span> - You set a target amount so that you can
+                        control the amount of money you are spending on a budget item.  You can monitor your
+                        expenses against this target goal.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          } <!-- End BeginForm -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

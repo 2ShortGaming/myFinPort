@@ -36,8 +36,7 @@ namespace myFinPort.Models
             get
             {
                 var target = db.BudgetItems.Where(bI => bI.BudgetId == Id).Count();
-                return target != 0 ? db.BudgetItems.Where(bI => bI.BudgetId == Id).Sum(s => s.TargetAmount) : 0;
-                
+                return target != 0 ? db.BudgetItems.Where(bI => bI.BudgetId == Id).Sum(s => s.TargetAmount) : 0;                
             }
         }
 

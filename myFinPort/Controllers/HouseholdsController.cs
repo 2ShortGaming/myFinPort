@@ -19,12 +19,19 @@ namespace myFinPort.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         UserRolesHelper rolesHelper = new UserRolesHelper();
+        HouseholdHelper hhHelper = new HouseholdHelper();
 
 
         // GET: Households
         public ActionResult Index()
         {
             return View(db.Households.ToList());
+        }
+
+        // GET: Members
+        public ActionResult Members()
+        {
+            return View(hhHelper.ListHouseholdMembers());
         }
 
         // GET: Households/Details/5
@@ -41,6 +48,80 @@ namespace myFinPort.Controllers
             }
             return View(household);
         }
+
+
+        // GET: Households/BuildHouse
+        public ActionResult BuildHouse()
+        {
+            var model = new BuildHouseWizardVM();
+            return View(model);
+        }
+
+        // POST: Households/BuildHouse
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "New User")]
+        public async Task<ActionResult> BuildHouse(BuildHouseWizardVM model, bool isPersonalAccount = false)
+        {
+            if (ModelState.IsValid)
+            {
+                // success path
+                db.Households.Add(model.Household);
+                db.SaveChanges();
+
+                var user = db.Users.Find(User.Identity.GetUserId());
+                user.HouseholdId = model.Household.Id;
+                rolesHelper.UpdateUserRole(user.Id, "Head");
+                db.SaveChanges();
+
+                await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+
+                // add bank account info
+                var bankAccount = new BankAccount
+                    (
+                        model.StartingBalance,
+                        model.BankAccount.WarningBalance,
+                        model.BankAccount.AccountName
+                    );
+
+                bankAccount.HouseholdId = (int)user.HouseholdId;
+                bankAccount.AccountType = model.BankAccount.AccountType;
+
+                if (isPersonalAccount)
+                {
+                    bankAccount.OwnerId = user.Id;
+                }
+                else
+                {
+                    bankAccount.OwnerId = null;
+                }
+
+                db.BankAccounts.Add(bankAccount);
+
+                // add budget info
+                var budget = new Budget();
+                budget.HouseholdId = (int)model.Household.Id;
+                budget.BudgetName = model.Budget.BudgetName;
+                db.Budgets.Add(budget);
+                db.SaveChanges();
+
+                // add budget item info
+                var budgetItem = new BudgetItem();
+                budgetItem.BudgetId = budget.Id;
+                budgetItem.TargetAmount = model.BudgetItem.TargetAmount;
+                budgetItem.ItemName = model.BudgetItem.ItemName;
+                db.BudgetItems.Add(budgetItem);
+                db.SaveChanges();
+
+                // now that the household has been established, refresh their login and send them to the dashboard.
+                
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            // error
+            return View(model);
+        }
+
 
         // GET: Households/Create
         public ActionResult Create()

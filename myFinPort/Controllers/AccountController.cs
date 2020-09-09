@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using myFinPort.Extensions;
 using myFinPort.Helpers;
 using myFinPort.Models;
 
@@ -22,6 +24,7 @@ namespace myFinPort.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private UserRolesHelper rolesHelper = new UserRolesHelper();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -62,6 +65,11 @@ namespace myFinPort.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                AuthorizeExtensions.AutoLogout(HttpContext);
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -84,7 +92,14 @@ namespace myFinPort.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (rolesHelper.IsUserInRole(UserManager.FindByEmail(model.Email).Id, "New User"))
+                    {
+                        return RedirectToAction("BuildHouse", "Households");
+                    }
+                    else 
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -188,12 +203,94 @@ namespace myFinPort.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("BuildHouse", "Households");
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // GET
+        [AllowAnonymous]
+        public ActionResult AcceptInvitation(string recipientEmail, string code)
+        {
+            var realGuid = Guid.Parse(code);
+            var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
+
+            if(invitation == null)
+            {
+                // TODO: need to create this view
+                return View("NotFoundError", invitation);
+            }
+            var expirationDate = invitation.Created.AddDays(invitation.TTL);
+            if(invitation.IsValid && DateTime.Now < expirationDate)
+            {
+                var householdName = db.Households.Find(invitation.HouseholdId).HouseholdName;
+                ViewBag.Greeting = $"Thank you for accepting my invitation to join the {householdName} House!";
+                var model = new AcceptInvitationVM()
+                {
+                    InvitationId = invitation.Id,
+                    Email = recipientEmail,
+                    Code = realGuid,
+                    HouseholdId = invitation.HouseholdId
+                };
+
+                return View(model);
+            }
+            return View("AcceptError", invitation);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<ActionResult> AcceptInvitation(AcceptInvitationVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    HouseholdId = model.HouseholdId
+                };
+
+                if (model.Avatar != null)
+                {
+                    if (FileUploadValidator.IsWebFriendlyImage(model.Avatar))
+                    {
+                        var fileName = FileStamp.MakeUnique(model.Avatar.FileName);
+
+                        var serverFolder = WebConfigurationManager.AppSettings["DefaultServerFolder"];
+                        model.Avatar.SaveAs(Path.Combine(Server.MapPath("~" + serverFolder), fileName));
+                        user.AvatarPath = $"{serverFolder}/{fileName}";
+                    }
+                }
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    rolesHelper.AddUserToRole(user.Id, "Member");
+                    InvitationHelper.MarkAsInvalid(model.InvitationId);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Dashboard", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+
             return View(model);
         }
 
@@ -474,7 +571,7 @@ namespace myFinPort.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
