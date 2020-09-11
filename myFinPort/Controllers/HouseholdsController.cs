@@ -237,6 +237,108 @@ namespace myFinPort.Controllers
             return View(household);
         }
 
+        // what do we need to do to leave a household?
+        // user leaving the house has HHId set to null
+        // if the user is in the Head role someone must take over
+        // if the user is in the Member role they can just leave
+        // anyone leaving needs role reset to New User
+        // if the user is the last person in the household the household can be deleted.
+        // async Task == void return type
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Head, Member")]
+        public async Task<ActionResult> LeaveAsync()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var role = rolesHelper.ListUserRoles(userId).FirstOrDefault();
+
+            switch (role)
+            {
+                case "Head":
+                    // -1 because I don't count the user doing this
+                    var memberCount = db.Users.Where(u => u.HouseholdId == user.HouseholdId).Count() - 1;
+                    if(memberCount >= 1)
+                    {
+                        TempData["Message"] = $"You are unable to leave the Household!  There are still <b>{memberCount}</b> other members in the household.  You must select one of them to assume your role!";
+                        // TODO: must create an "ExitDenied" action in this controller to deal with this next line.
+                        return RedirectToAction("ExitDenied");
+                    }
+
+                    // this is a "soft" delete.  record stays in the database, but you can limit access on the front end
+                    user.Household.IsDeleted = true;
+
+                    // uncomment the next two lines for a hard delete, the record is removed from the database and anything with the
+                    // household foreign key will be cascade deleted
+                    //var household = db.Households.Find(user.HouseholdId);
+                    //db.Households.Remove(household);
+
+                    user.HouseholdId = null;
+                    db.SaveChanges();
+
+                    rolesHelper.UpdateUserRole(userId, "New User");
+                    await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+                    return RedirectToAction("Dashboard", "Home");
+
+                case "Member":
+                    user.HouseholdId = null;
+                    db.SaveChanges();
+
+                    rolesHelper.UpdateUserRole(userId, "New User");
+                    await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+                    return RedirectToAction("Dashboard", "Home");
+
+                default:
+                    return RedirectToAction("Dashboard", "Home");
+            }
+        }
+
+        [Authorize(Roles = "Head")]
+        public ActionResult ExitDenied()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Head")]
+        public ActionResult ChangeHead()
+        {
+            // TODO: look up null coelessing operator
+            var myHouseId = User.Identity.GetHouseholdId();
+
+            if (myHouseId == 0)
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+            var members = db.Users.Where(u => u.HouseholdId == myHouseId).ToList();
+            ViewBag.NewHoH = new SelectList(members, "Id", "FullName");
+
+            return View();
+        }
+
+        [HttpPost, ActionName("ChangeHead")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeHeadAsync(string newHoH, bool leave)
+        {
+            if (string.IsNullOrEmpty(newHoH))
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+            var user = db.Users.Find(User.Identity.GetUserId());
+            rolesHelper.UpdateUserRole(newHoH, "Head");
+            if (leave)
+            {
+                // TODO: He copied stuff and I couldn't keep up.
+            }
+
+            user.HouseholdId = null;
+            db.SaveChanges();
+
+            rolesHelper.UpdateUserRole(User.Identity.GetUserId(), "New User");
+            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+            return RedirectToAction("Dashboard", "Home");
+        }
+
+
         // GET: Households/Delete/5
         public ActionResult Delete(int? id)
         {

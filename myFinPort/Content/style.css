@@ -6524,7 +6524,7 @@ a.mytooltip {
 }
 
 .mailbox .message-center {
-    height: 200px;
+    /*height: 200px;*/
     overflow: auto;
     position: relative
 }

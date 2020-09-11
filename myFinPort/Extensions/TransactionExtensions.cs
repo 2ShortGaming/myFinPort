@@ -42,7 +42,6 @@ namespace myFinPort.Extensions
 
             if(transaction.TransactionType == TransactionType.Deposit)
             {
-                
                 bankAccount.CurrentBalance += transaction.Amount;
             }
             else if(transaction.TransactionType == TransactionType.Withdrawal)
@@ -73,6 +72,10 @@ namespace myFinPort.Extensions
         // what happens when I edit a transaction? - hint you might need a momento object .AsNoTracking()
         // momento object means grab the transaction before it was edited so you'll have that to compare to the edited version
         // what happens when I delete or void a transaction? - part of these methods involve tracking the old amount
+
+        // TODO Edit a transaction
+
+        // TODO Void a transaction
 
     }
 }

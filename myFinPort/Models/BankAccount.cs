@@ -26,7 +26,7 @@ namespace myFinPort.Models
         public DateTime Created { get; set; }
 
         [Display(Name = "Starting Balance")]
-        public decimal StartingBalance { get; internal set; }
+        public decimal StartingBalance { get; set; }
 
         [Display(Name = "Current Balance")]
         public decimal CurrentBalance { get; set; }
@@ -54,9 +54,7 @@ namespace myFinPort.Models
             HouseholdId = (int)HttpContext.Current.User.Identity.GetHouseholdId();
         }
 
-        public BankAccount()
-        {
-            StartingBalance = -1; // this is an error case you can test for
-        }
+        public BankAccount(){}
+
     }
 }

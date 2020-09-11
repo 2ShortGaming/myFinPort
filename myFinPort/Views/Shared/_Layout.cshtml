@@ -92,6 +92,50 @@
             <!-- This is  -->
             <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
             <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+            <!-- ============================================================== -->
+            <!-- Transactions -->
+            <!-- ============================================================== -->
+            <li class="nav-item dropdown">
+              <a
+                 class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark"
+                 href="@Url.Action("Create", "Transactions")"  data-toggle="dropdown" >
+                 <i class="mdi mdi-cash-100"></i>
+                 @*<div class="notify"></div>*@
+              </a>
+              <div class="dropdown-menu mailbox animated slideInUp">
+                <ul>
+                  <li>
+                    <div class="drop-title">Record a Transaction</div>
+                  </li>
+                  <li>
+                    <div class="message-center">
+                      <!-- Deposit -->
+                      <a href="@Url.Action("CreateDeposit", "Transactions")">
+                        <div class="btn btn-success btn-sm btn-circle mr-2"><i class="fa fa-usd"></i></div>
+                        <div class="mail-contnet">
+                          <h5> Deposit</h5>
+                        </div>
+                      </a>
+                      <!-- Withdrawal -->
+                      <a href="@Url.Action("CreateWithdrawal", "Transactions")">
+                        <div class="btn btn-success btn-sm btn-circle mr-2"><i class="fa fa-usd"></i></div>
+                        <div class="mail-contnet">
+                          <h5> Withdrawal</h5>
+                        </div>
+                      </a>
+                      <!-- Transfer -->
+                      <a href="@Url.Action("CreateTransfer", "Transactions")">
+                        <div class="btn btn-success btn-sm btn-circle mr-2"><i class="fa fa-usd"></i></div>
+                        <div class="mail-contnet">
+                          <h5> Transfer</h5>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              </li>
+            <!-- End Transactions -->
           </ul>
           <!-- ============================================================== -->
           <!-- User profile and search -->
@@ -186,7 +230,13 @@
             <li class="nav-devider"></li>
             <li class="nav-small-cap">HOUSEHOLD</li>
             <li>
-              <a class="waves-effect waves-dark" href="@Url.Action("Dashboard", "Home")" aria-expanded="false"><i class="mdi mdi-gauge"></i>Dashboard </a>
+              <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboards <span class="label label-rouded label-themecolor pull-right">3</span></span></a>
+              @*<a class="waves-effect waves-dark" href="@Url.Action("Dashboard", "Home")" aria-expanded="false"><i class="mdi mdi-gauge"></i>Dashboard </a>*@
+            <ul class="collapse">
+              <li><a href="@Url.Action("Dashboard", "Home")">Year to Date </a></li>
+              <li><a href="@Url.Action("DashboardMtd", "Home")">Month to Date </a></li>
+              <li><a href="@Url.Action("Dashboardt30d", "Home")">Trailing 30 Days</a></li>
+            </ul>
             </li>
             <li>
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bank"></i><span class="hide-menu">Accounts</span></a>
@@ -261,9 +311,29 @@
               </ul>
             </li>
             <li class="nav-small-cap">PERSONAL</li>
-
-
-            <li class="nav-small-cap">EXTRA COMPONENTS</li>
+            <hr />
+            <li>
+              @using (Html.BeginForm("LogOff", "Account"))
+              {
+                @Html.AntiForgeryToken();
+                <div class="text-center">
+                  <button class="btn btn-danger mb-3" type="submit"><i class="fa fa-power-off"></i> Logout</button>
+                </div>
+              }
+            </li>
+            @if (rolesHelper.IsUserInRole(User.Identity.GetUserId(), "Head") ||
+                 rolesHelper.IsUserInRole(User.Identity.GetUserId(), "Member"))
+            {
+              <li>
+                @using (Html.BeginForm("LeaveAsync", "Households"))
+                {
+                  @Html.AntiForgeryToken();
+                  <div class="text-center">
+                    <button class="btn btn-dark" type="submit"><i class="mdi mdi-account-remove"></i> Leave Household</button>
+                  </div>
+                }
+              </li>
+            }
           </ul>
         </nav>
         <!-- End Sidebar navigation -->

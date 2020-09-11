@@ -214,6 +214,9 @@
     <Compile Include="ViewModels\BudgetWizardVM.cs" />
     <Compile Include="ViewModels\BuildHouseWizardVM.cs" />
     <Compile Include="ViewModels\ConfigureHouseVM.cs" />
+    <Compile Include="ViewModels\DashboardVM.cs" />
+    <Compile Include="ViewModels\TransactionsVM.cs" />
+    <Compile Include="ViewModels\TransferVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\all.css" />
@@ -473,6 +476,11 @@
     <Content Include="Private.config" />
     <Content Include="Views\Households\Members.cshtml" />
     <Content Include="Views\Account\AcceptInvitation.cshtml" />
+    <Content Include="Views\Households\ExitDenied.cshtml" />
+    <Content Include="Views\Households\ChangeHead.cshtml" />
+    <Content Include="Views\Transactions\CreateDeposit.cshtml" />
+    <Content Include="Views\Transactions\CreateWithdrawal.cshtml" />
+    <Content Include="Views\Transactions\CreateTransfer.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

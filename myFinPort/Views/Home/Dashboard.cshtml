@@ -1,34 +1,133 @@
-﻿@{
-  ViewBag.Title = "Home Page";
+﻿@model myFinPort.ViewModels.DashboardVM
+
+@using myFinPort.Helpers
+
+@{
+  ViewBag.Title = "Dashboard";
+  BankAccountsHelper bankAccountsHelper = new BankAccountsHelper();
 }
 
 <div class="container">
+  <h5 class="text-center mb-5">
+    <span class="text-purple">@ViewBag.TimePeriod: </span>
+    <span class="text-danger"></span> @Model.StartDate.ToString("dd MMM yyyy")
+    <span class="text-danger">To</span> @Model.EndDate.ToString("dd MMM yyyy")
+  </h5>
+
+  <div class="row">
+    <!-- Account Balances -->
+    <div class="col-3">
+      <div class="card card-inverse card-info">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="m-r-20 align-self-center">
+              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+            </div>
+            <div>
+              <h3 class="card-title">Account Balances</h3>
+              <h6 class="card-subtitle">@Model.EndDate.ToString("dd MMM yyyy")</h6>
+            </div>
+          </div>
+          <hr />
+          @foreach (var account in bankAccountsHelper.ListBankAccounts())
+          {
+            <div class="row text-center">
+              <div class="col-11">
+                <p class="font-light text-white">
+                  @account.AccountName: @string.Format("{0:C}", account.CurrentBalance)
+                </p>
+              </div>
+              @*<div class="col-6 p-t-10 p-b-20 text-right">
+                  <div class="spark-count" style="height:65px"></div>
+                </div>*@
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Income -->
+    <div class="col-3">
+      <div class="card card-inverse card-success">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="m-r-20 align-self-center">
+              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+            </div>
+            <div>
+              <h3 class="card-title">Deposits</h3>
+              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col-12 align-self-center">
+              <h2 class="font-light text-white">$2,378.93</h2>
+            </div>
+            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+              <div class="spark-count2" style="height:65px"></div>
+            </div>*@
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses -->
+    <div class="col-3">
+      <div class="card card-inverse card-danger">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="m-r-20 align-self-center">
+              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+            </div>
+            <div>
+              <h3 class="card-title">Withdrawals</h3>
+              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col-12 align-self-center">
+              <h2 class="font-light text-white">$2,578.93</h2>
+            </div>
+            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+        <div class="spark-count2" style="height:65px"></div>
+      </div>*@
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Net Gain -->
+    <div class="col-3">
+      <div class="card card-inverse card-megna">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="m-r-20 align-self-center">
+              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+            </div>
+            <div>
+              <h3 class="card-title">Net Gain</h3>
+              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col-12 align-self-center">
+              <h2 class="font-light text-white"><span class="text-danger">$-200</span></h2>
+            </div>
+            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+        <div class="spark-count2" style="height:65px"></div>
+      </div>*@
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 
   <div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4">
-      <h2>Getting started</h2>
-      <p>
-        ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-        enables a clean separation of concerns and gives you full control over markup
-        for enjoyable, agile development.
-      </p>
-      <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-      <h2>Get more libraries</h2>
-      <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-      <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-      <h2>Web Hosting</h2>
-      <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-      <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
   </div>
 </div>

@@ -1,27 +1,32 @@
-﻿@model myFinPort.Models.Transaction
+﻿@model myFinPort.ViewModels.TransactionsVM
 
 @{
-    ViewBag.Title = "Create";
+  ViewBag.Title = "CreateWithdrawal";
 }
 
-
+<h2>Create Withdrawal</h2>
 <div class="container">
   <h2>Create</h2>
   @using (Html.BeginForm())
   {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TransactionType)
 
     <div class="form-horizontal">
-      <h4>Transaction</h4>
+      <h4>Withdrawal Transaction</h4>
+      @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+      {
+        <p class="text-danger">@ViewBag.ErrorMessage</p>
+      }
       <hr />
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
       <div class="form-group">
-        @Html.LabelFor(model => model.AccountId, "AccountId", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.BankAccountId, "BankAccountId", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-          @Html.DropDownList("AccountId", null, htmlAttributes: new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+          @Html.DropDownList("BankAccountId", null, htmlAttributes: new { @class = "form-control" })
+          @Html.ValidationMessageFor(model => model.BankAccountId, "", new { @class = "text-danger" })
         </div>
       </div>
 
@@ -30,22 +35,6 @@
         <div class="col-md-10">
           @Html.DropDownList("BudgetItemId", null, htmlAttributes: new { @class = "form-control" })
           @Html.ValidationMessageFor(model => model.BudgetItemId, "", new { @class = "text-danger" })
-        </div>
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.OwnerId, "OwnerId", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-          @Html.DropDownList("OwnerId", null, htmlAttributes: new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.OwnerId, "", new { @class = "text-danger" })
-        </div>
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.TransactionType, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-          @Html.EnumDropDownListFor(model => model.TransactionType, htmlAttributes: new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.TransactionType, "", new { @class = "text-danger" })
         </div>
       </div>
 
@@ -78,3 +67,4 @@
   </div>
 
 </div>
+
