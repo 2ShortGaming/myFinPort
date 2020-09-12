@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using myFinPort.Extensions;
 using myFinPort.Models;
 
 namespace myFinPort.Controllers
@@ -49,13 +51,22 @@ namespace myFinPort.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseholdId,OwnerId,Created,BudgetName,CurrentAmount")] Budget budget)
+        public ActionResult Create([Bind(Include = "BudgetName")] Budget budget)
         {
             if (ModelState.IsValid)
             {
-                db.Budgets.Add(budget);
+                var newBudget = new Budget()
+                {
+                    HouseholdId = (int)User.Identity.GetHouseholdId(),
+                    OwnerId = User.Identity.GetUserId(),
+                    Created = DateTime.Now,
+                    BudgetName = budget.BudgetName,
+                    CurrentAmount = 0M,
+                    Items = null
+                };
+                db.Budgets.Add(newBudget);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "HouseholdName", budget.HouseholdId);

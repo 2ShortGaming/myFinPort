@@ -1,75 +1,73 @@
 ﻿@model IEnumerable<myFinPort.Models.Transaction>
 
 @{
-    ViewBag.Title = "Index";
+  ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+@*<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />*@
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Account.OwnerId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BudgetItem.ItemName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Owner.Email)
-        </th>
-        <th>
+<div class="container">
+  <h2>List of Transactions</h2>
+
+  <div class="table-responsive">
+    <table id="TransactionsTable" class="table m-t-30 table-hover no-wrap contact-list display">
+      <thead>
+        <tr>
+          <th class="text-blue">
+            @Html.DisplayNameFor(model => model.Account.AccountName)
+          </th>
+          <th class="text-blue">
             @Html.DisplayNameFor(model => model.TransactionType)
-        </th>
-        <th>
+          </th>
+          <th class="text-blue">
             @Html.DisplayNameFor(model => model.Created)
-        </th>
-        <th>
+          </th>
+          <th class="text-blue">
             @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
+          </th>
+          <th class="text-blue">
             @Html.DisplayNameFor(model => model.Memo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </th>
-        <th></th>
-    </tr>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td class="text-light">
+              @Html.DisplayFor(modelItem => item.Account.AccountName)
+            </td>
+            <td class="text-light">
+              @Html.DisplayFor(modelItem => item.TransactionType)
+            </td>
+            <td class="text-light">
+              @item.Created.ToString("dd MMM yyyy")
+            </td>
+            <td class="text-light">
+              @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td class="text-light">
+              @Html.DisplayFor(modelItem => item.Memo)
+            </td>
+            <td class="text-light">
+              @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+              @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+              @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Account.OwnerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BudgetItem.ItemName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Owner.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransactionType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Memo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsDeleted)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+</div>
 
-</table>
+@section Scripts {
+  <script src="~/Scripts/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#TransactionsTable').DataTable();
+    })
+  </script>
+  }

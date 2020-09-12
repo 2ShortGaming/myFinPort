@@ -96,11 +96,10 @@
             <!-- Transactions -->
             <!-- ============================================================== -->
             <li class="nav-item dropdown">
-              <a
-                 class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark"
-                 href="@Url.Action("Create", "Transactions")"  data-toggle="dropdown" >
-                 <i class="mdi mdi-cash-100"></i>
-                 @*<div class="notify"></div>*@
+              <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark"
+                 href="@Url.Action("Create", "Transactions")" data-toggle="dropdown">
+                <i class="mdi mdi-cash-100"></i>
+                @*<div class="notify"></div>*@
               </a>
               <div class="dropdown-menu mailbox animated slideInUp">
                 <ul>
@@ -134,7 +133,7 @@
                   </li>
                 </ul>
               </div>
-              </li>
+            </li>
             <!-- End Transactions -->
           </ul>
           <!-- ============================================================== -->
@@ -232,11 +231,11 @@
             <li>
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-camera"></i><span class="hide-menu">Snapshots <span class="label label-rouded label-themecolor pull-right">3</span></span></a>
               @*<a class="waves-effect waves-dark" href="@Url.Action("Dashboard", "Home")" aria-expanded="false"><i class="mdi mdi-gauge"></i>Dashboard </a>*@
-            <ul class="collapse">
-              <li><a href="@Url.Action("Dashboard", "Home")">Year to Date </a></li>
-              <li><a href="@Url.Action("DashboardMtd", "Home")">Month to Date </a></li>
-              <li><a href="@Url.Action("Dashboardt30d", "Home")">Trailing 30 Days</a></li>
-            </ul>
+              <ul class="collapse">
+                <li><a href="@Url.Action("Dashboard", "Home")">Year to Date </a></li>
+                <li><a href="@Url.Action("DashboardMtd", "Home")">Month to Date </a></li>
+                <li><a href="@Url.Action("Dashboardt30d", "Home")">Trailing 30 Days</a></li>
+              </ul>
             </li>
             <li>
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bank"></i><span class="hide-menu">Accounts</span></a>
@@ -261,7 +260,7 @@
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bullseye"></i><span class="hide-menu">Budgets</span></a>
               <ul>
                 <li>
-                  @Html.ActionLink("Add New", "Create", "Budgets")
+                  <a alt="default" data-toggle="modal" data-target="#budget-modal" class="model_img img-responsive">Add New</a>
                 </li>
                 @if (budgetsHelper.BudgetsCount() > 0)
                 {
@@ -274,6 +273,23 @@
                 }
               </ul>
             </li>
+            <!-- Transactions Menu -->
+            <li>
+              <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-cash-usd"></i><span class="hide-menu">Transactions</span></a>
+              <ul>
+                <li>
+                  @Html.ActionLink("List All", "Index", "Transactions")
+                </li>
+                <li>
+                  <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><span class="hide-menu">New</span></a>
+                  <ul aria-expanded="false" class="collapse">
+                    <li><a href="@Url.Action("CreateDeposit", "Transactions")">Deposit</a></li>
+                    <li><a href="@Url.Action("CreateWithdrawal", "Transactions")">Withdrawal</a></li>
+                    <li><a href="@Url.Action("CreateTransfer", "Transactions")">Transfer</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
             <li>
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Members</span></a>
               <ul>
@@ -283,35 +299,15 @@
                 @if (rolesHelper.IsUserInRole(User.Identity.GetUserId(), "Head"))
                 {
                   <li>
-                    <!-- This might just be a modal display instead of a full blown view. -->
                     <a alt="default" data-toggle="modal" data-target="#invite-modal" class="model_img img-responsive">Invite</a>
-                    @*@Html.ActionLink("Invite", "Create", "Invitations")*@
                   </li>
                 }
               </ul>
             </li>
 
-            <li>
-              <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bullseye"></i><span class="hide-menu">Apps</span></a>
-              <ul aria-expanded="false" class="collapse">
-                <li><a href="app-calendar.html">Calendar</a></li>
-                <li><a href="app-chat.html">Chat app</a></li>
-                <li><a href="app-ticket.html">Support Ticket</a></li>
-                <li><a href="app-contact.html">Contact / Employee</a></li>
-                <li><a href="app-contact2.html">Contact Grid</a></li>
-                <li><a href="app-contact-detail.html">Contact Detail</a></li>
-              </ul>
-            </li>
-            <li>
-              <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span class="hide-menu">Inbox</span></a>
-              <ul aria-expanded="false" class="collapse">
-                <li><a href="app-email.html">Mailbox</a></li>
-                <li><a href="app-email-detail.html">Mailbox Detail</a></li>
-                <li><a href="app-compose.html">Compose Mail</a></li>
-              </ul>
-            </li>
-            <li class="nav-small-cap">PERSONAL</li>
-            <hr />
+            <!-- will put PERSONAL back in when I have that functionality working -->
+            @*<li class="nav-small-cap">PERSONAL</li>*@
+            <li class="nav-devider"></li>
             <li>
               @using (Html.BeginForm("LogOff", "Account"))
               {
@@ -390,7 +386,7 @@
   <div id="invite-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
       <div class="modal-content">
-        @using (Html.BeginForm("CreateInvitation", "Invitations"))
+        @using (Html.BeginForm("Create", "Budgets"))
         {
           @Html.AntiForgeryToken()
 
@@ -408,8 +404,38 @@
           </div>
           @*<div class="form-group">*@
           <div class="modal-footer">
-            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-danger waves-effect waves-light">Send Invitation</button>
+          </div>
+          @*</div>*@
+        }
+      </div>
+    </div>
+  </div>
+
+  <div id="budget-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        @using (Html.BeginForm("Create", "Budgets"))
+        {
+          @Html.AntiForgeryToken()
+
+          <div class="modal-header">
+            <h4 class="modal-title">Create New Budget</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group">
+              @Html.Label("BudgetName", htmlAttributes: new { @class = "control-label col-md-2" })
+              @Html.Editor("BudgetName", new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+          </div>
+          @*<div class="form-group">*@
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger waves-effect waves-light">Create</button>
           </div>
           @*</div>*@
         }
@@ -456,6 +482,9 @@
   <!-- Style switcher -->
   <!-- ============================================================== -->
   <script src="~/Scripts/jQuery.style.switcher.js"></script>
+
+  @RenderSection("scripts", required: false)
+
 </body>
 
 </html>

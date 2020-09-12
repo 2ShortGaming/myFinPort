@@ -251,6 +251,7 @@ namespace myFinPort.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {

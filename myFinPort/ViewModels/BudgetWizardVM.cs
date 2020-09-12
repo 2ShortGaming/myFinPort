@@ -6,7 +6,9 @@ namespace myFinPort.ViewModels
 {
     public class BudgetWizardVM
     {
-        public BudgetWizardVM Budget { get; set; }
+        public string BudgetName { get; set; }
+
+        public decimal TargetAmount { get; set; }
 
         public ICollection<BudgetItem> BudgetItem { get; set; }
     }

@@ -260,6 +260,7 @@
     <Content Include="Content\futurico\futurico%402x.png" />
     <Content Include="Content\futurico\futurico.css" />
     <Content Include="Content\futurico\futurico.png" />
+    <Content Include="Content\jquery.dataTables.min.css" />
     <Content Include="Content\linea.css" />
     <Content Include="Content\line\aero.css" />
     <Content Include="Content\line\blue.css" />
@@ -369,6 +370,7 @@
     <Content Include="Scripts\dashboard1.js" />
     <Content Include="Scripts\icheck.init.js" />
     <Content Include="Scripts\icheck.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.slimscroll.js" />
     <Content Include="Scripts\jquery.sparkline.min.js" />

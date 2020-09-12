@@ -9634,3 +9634,11 @@ a.list-group-item:hover {
     font-variant: small-caps;
     font-size: 1.3em
 }
+
+.dataTables_length select {
+    color: Gray
+}
+
+table.dataTable thead .sorting::after{
+    color: Gray
+}
