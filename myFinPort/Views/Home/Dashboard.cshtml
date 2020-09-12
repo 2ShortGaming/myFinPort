@@ -8,126 +8,227 @@
 }
 
 <div class="container">
-  <h5 class="text-center mb-5">
-    <span class="text-purple">@ViewBag.TimePeriod: </span>
-    <span class="text-danger"></span> @Model.StartDate.ToString("dd MMM yyyy")
+  <h4 class="text-center mb-5">
+    <i class="mdi mdi-camera mr-2"></i>
+    <span class="scaps">Financial Snapshot </span>:
+    @Model.StartDate.ToString("dd MMM yyyy")
     <span class="text-danger">To</span> @Model.EndDate.ToString("dd MMM yyyy")
-  </h5>
+    <span class="text-purple">(@ViewBag.TimePeriod)</span>
+  </h4>
 
-  <div class="row">
-    <!-- Account Balances -->
-    <div class="col-3">
-      <div class="card card-inverse card-info">
-        <div class="card-body">
-          <div class="d-flex">
-            <div class="m-r-20 align-self-center">
-              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
-            </div>
-            <div>
-              <h3 class="card-title">Account Balances</h3>
-              <h6 class="card-subtitle">@Model.EndDate.ToString("dd MMM yyyy")</h6>
-            </div>
-          </div>
-          <hr />
-          @foreach (var account in bankAccountsHelper.ListBankAccounts())
-          {
-            <div class="row text-center">
-              <div class="col-11">
-                <p class="font-light text-white">
-                  @account.AccountName: @string.Format("{0:C}", account.CurrentBalance)
-                </p>
+
+  <div class="container">
+    <div class="col-12">
+      <div class="card bg-light px-3">
+        <div class="card-title text-center">
+          <h3 class="mt-3">Totals for All Accounts</h3>
+        </div>
+        <div class="row">
+          <!-- Account Balances -->
+          <div class="col-3">
+            <div class="card card-inverse card-info">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="m-r-20 align-self-center">
+                    <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                  </div>
+                  <div>
+                    <h3 class="card-title">Balances</h3>
+                    <h6 class="card-subtitle">@Model.EndDate.ToString("dd MMM yyyy")</h6>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-12 align-self-center">
+                    <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalBalance())</h2>
+                  </div>
+                </div>
               </div>
-              @*<div class="col-6 p-t-10 p-b-20 text-right">
-                  <div class="spark-count" style="height:65px"></div>
-                </div>*@
             </div>
-          }
+          </div>
+
+          <!-- Income -->
+          <div class="col-3">
+            <div class="card card-inverse card-success">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="m-r-20 align-self-center">
+                    <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                  </div>
+                  <div>
+                    <h3 class="card-title">Deposits</h3>
+                    <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-12 align-self-center">
+                    <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalDepositsFromDate(Model.StartDate))</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expenses -->
+          <div class="col-3">
+            <div class="card card-inverse card-danger">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="m-r-20 align-self-center">
+                    <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                  </div>
+                  <div>
+                    <h3 class="card-title">Withdrawals</h3>
+                    <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-12 align-self-center">
+                    <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalWithdrawalsFromDate(Model.StartDate))</h2>
+                  </div>
+                  @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+                    <div class="spark-count2" style="height:65px"></div>
+                  </div>*@
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Net Gain -->
+          <div class="col-3">
+            <div class="card card-inverse card-megna">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="m-r-20 align-self-center">
+                    <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                  </div>
+                  <div>
+                    <h3 class="card-title">Net Gain</h3>
+                    <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class="col-12 align-self-center">
+                    <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.GetNetFromDate(Model.StartDate))</h2>
+                  </div>
+                  @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+                    <div class="spark-count2" style="height:65px"></div>
+                  </div>*@
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Income -->
-    <div class="col-3">
-      <div class="card card-inverse card-success">
-        <div class="card-body">
-          <div class="d-flex">
-            <div class="m-r-20 align-self-center">
-              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
-            </div>
-            <div>
-              <h3 class="card-title">Deposits</h3>
-              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
-            </div>
+    <!-- ********************************** -->
+    <!-- Start individual account snapshots -->
+    @foreach (var account in bankAccountsHelper.ListHHBankAccounts())
+    {
+      <div class="col-12">
+        <div class="card bg-light px-3">
+          <div class="card-title text-center">
+            <h3 class="mt-3">@account.AccountName Totals</h3>
           </div>
-          <div class="row text-center">
-            <div class="col-12 align-self-center">
-              <h2 class="font-light text-white">$2,378.93</h2>
+          <div class="row">
+            <!-- Account Balances -->
+            <div class="col-3">
+              <div class="card card-inverse card-info">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="m-r-20 align-self-center">
+                      <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                    </div>
+                    <div>
+                      <h3 class="card-title">Balance</h3>
+                      <h6 class="card-subtitle">@Model.EndDate.ToString("dd MMM yyyy")</h6>
+                    </div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col-12 align-self-center">
+                      <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalBalance(account))</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
-              <div class="spark-count2" style="height:65px"></div>
-            </div>*@
+
+            <!-- Income -->
+            <div class="col-3">
+              <div class="card card-inverse card-success">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="m-r-20 align-self-center">
+                      <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                    </div>
+                    <div>
+                      <h3 class="card-title">Deposits</h3>
+                      <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                    </div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col-12 align-self-center">
+                      <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalDepositsFromDate(account, Model.StartDate))</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="col-3">
+              <div class="card card-inverse card-danger">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="m-r-20 align-self-center">
+                      <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                    </div>
+                    <div>
+                      <h3 class="card-title">Withdrawals</h3>
+                      <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                    </div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col-12 align-self-center">
+                      <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.TotalWithdrawalsFromDate(account, Model.StartDate))</h2>
+                    </div>
+                    @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+                      <div class="spark-count2" style="height:65px"></div>
+                    </div>*@
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Net Gain -->
+            <div class="col-3">
+              <div class="card card-inverse card-megna">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="m-r-20 align-self-center">
+                      <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
+                    </div>
+                    <div>
+                      <h3 class="card-title">Net</h3>
+                      <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
+                    </div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col-12 align-self-center">
+                      <h2 class="font-light text-white">@string.Format("{0:c}", bankAccountsHelper.GetNetFromDate(account, Model.StartDate))</h2>
+                    </div>
+                    @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
+                      <div class="spark-count2" style="height:65px"></div>
+                    </div>*@
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Expenses -->
-    <div class="col-3">
-      <div class="card card-inverse card-danger">
-        <div class="card-body">
-          <div class="d-flex">
-            <div class="m-r-20 align-self-center">
-              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
-            </div>
-            <div>
-              <h3 class="card-title">Withdrawals</h3>
-              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
-            </div>
-          </div>
-          <div class="row text-center">
-            <div class="col-12 align-self-center">
-              <h2 class="font-light text-white">$2,578.93</h2>
-            </div>
-            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
-        <div class="spark-count2" style="height:65px"></div>
-      </div>*@
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Net Gain -->
-    <div class="col-3">
-      <div class="card card-inverse card-megna">
-        <div class="card-body">
-          <div class="d-flex">
-            <div class="m-r-20 align-self-center">
-              <h1 class="text-white"><i class="mdi mdi-bank"></i></h1>
-            </div>
-            <div>
-              <h3 class="card-title">Net Gain</h3>
-              <h6 class="card-subtitle">@ViewBag.TimePeriod</h6>
-            </div>
-          </div>
-          <div class="row text-center">
-            <div class="col-12 align-self-center">
-              <h2 class="font-light text-white"><span class="text-danger">$-200</span></h2>
-            </div>
-            @*<div class="col-6 p-t-10 p-b-20 text-right align-self-center">
-        <div class="spark-count2" style="height:65px"></div>
-      </div>*@
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    }
   </div>
 </div>

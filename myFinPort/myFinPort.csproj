@@ -196,6 +196,7 @@
     <Compile Include="Helpers\SeedHelper.cs" />
     <Compile Include="Helpers\SlugMaker.cs" />
     <Compile Include="Helpers\StringUtilities.cs" />
+    <Compile Include="Helpers\TransactionsHelper.cs" />
     <Compile Include="Helpers\UserRolesHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

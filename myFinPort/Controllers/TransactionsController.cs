@@ -228,10 +228,8 @@ namespace myFinPort.Controllers
                 db.SaveChanges();
 
                 var thisWdTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == wdTransaction.Id);
-                thisWdTransaction.UpdateBalances();
-
                 var thisDepTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == depTransaction.Id);
-                thisDepTransaction.UpdateBalances();
+                thisWdTransaction.TransferFunds(thisDepTransaction);
 
                 return RedirectToAction("Dashboard", "Home");
             }

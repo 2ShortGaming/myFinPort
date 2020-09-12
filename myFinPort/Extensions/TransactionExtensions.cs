@@ -31,6 +31,16 @@ namespace myFinPort.Extensions
             }
         }
 
+        public static void TransferFunds(this Transaction wdTransaction, Transaction depTransaction)
+        {
+            var fromBankAccount = db.BankAccounts.Find(wdTransaction.AccountId);
+            var toBankAccount = db.BankAccounts.Find(depTransaction.AccountId);
+
+            fromBankAccount.CurrentBalance -= wdTransaction.Amount;
+            toBankAccount.CurrentBalance += depTransaction.Amount;
+            db.SaveChanges();
+        }
+
         public static void EditTransaction(this Transaction newTransaction, Transaction oldTransaction)
         {
             return;
@@ -39,12 +49,13 @@ namespace myFinPort.Extensions
         private static void UpdateBankBalance(Transaction transaction)
         {
             var bankAccount = db.BankAccounts.Find(transaction.AccountId);
+            var tt = transaction.TransactionType;
 
-            if(transaction.TransactionType == TransactionType.Deposit)
+            if(tt == TransactionType.Deposit)
             {
                 bankAccount.CurrentBalance += transaction.Amount;
             }
-            else if(transaction.TransactionType == TransactionType.Withdrawal)
+            else if(tt == TransactionType.Withdrawal)
             {
                 bankAccount.CurrentBalance -= transaction.Amount;
             }
