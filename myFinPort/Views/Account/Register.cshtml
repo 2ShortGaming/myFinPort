@@ -71,7 +71,7 @@
               <!-- FirstName field -->
               <div class="form-group">
                 <div class="col-12">
-                  @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name*" })
+                  @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control px-2", placeholder = "First Name*" })
                   @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                 </div>
               </div>
@@ -84,7 +84,7 @@
               <!-- LastName field -->
               <div class="form-group">
                 <div class="col-12">
-                  @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name*" })
+                  @Html.TextBoxFor(m => m.LastName, new { @class = "form-control px-2", placeholder = "Last Name*" })
                   @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                 </div>
               </div>
@@ -100,7 +100,7 @@
               <!-- Email field -->
               <div class="form-group ">
                 <div class="col-12">
-                  @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email*", type = "email" })
+                  @Html.TextBoxFor(m => m.Email, new { @class = "form-control px-2", placeholder = "Email*", type = "email" })
                   @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
               </div>
@@ -108,7 +108,7 @@
               <!-- Password field -->
               <div class="form-group ">
                 <div class="col-12">
-                  @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password*", type = "password" })
+                  @Html.TextBoxFor(m => m.Password, new { @class = "form-control px-2", placeholder = "Password*", type = "password" })
                   @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 </div>
               </div>
@@ -116,7 +116,7 @@
               <!-- Confirm Password field -->
               <div class="form-group">
                 <div class="col-12">
-                  @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password*", type = "password" })
+                  @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control px-2", placeholder = "Confirm Password*", type = "password" })
                   @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
                 </div>
               </div>
