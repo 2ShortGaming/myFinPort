@@ -49,7 +49,7 @@ namespace myFinPort.Models
             Notifications = new HashSet<Notification>();
             Transactions = new HashSet<Transaction>();
             Accounts = new HashSet<BankAccount>();
-            AvatarPath = "Images/Avatars/default_avatar.png";
+            AvatarPath = "/Images/Avatars/default_avatar.png";
         }
 
 
