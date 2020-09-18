@@ -51,8 +51,11 @@
               @Html.DisplayFor(modelItem => item.Memo)
             </td>
             <td class="text-light">
-              @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-              @Html.ActionLink("Void", "Delete", new { id = item.Id })
+              @if(item.TransactionType != myFinPort.Enums.TransactionType.Transfer)
+              {
+                  @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <span>|</span>
+                  @Html.ActionLink("Void", "Delete", new { id = item.Id })
+              }
             </td>
           </tr>
         }

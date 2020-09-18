@@ -23,7 +23,8 @@ namespace myFinPort.Extensions
         {
             UpdateBankBalance(transaction);
 
-            // deposits do not affect Budget or BudgetItem so we can test for the transaction type before calling those methods
+            // deposits do not affect Budget or BudgetItem so we can test for the transaction
+            // type before calling those methods
             if (transaction.TransactionType == TransactionType.Withdrawal)
             {
                 UpdateBudgetAmount(transaction);
@@ -41,8 +42,45 @@ namespace myFinPort.Extensions
             db.SaveChanges();
         }
 
-        public static void EditTransaction(this Transaction newTransaction, Transaction oldTransaction)
+        public static void VoidTransaction(this Transaction transaction)
         {
+            // when a transaction is being voided, we must reverse the updates for the transaction that were
+            // made when it was first created.
+
+            var bankAccount = db.BankAccounts.Find(transaction.AccountId);
+            var budgetItem = db.BudgetItems.Find(transaction.BudgetItemId);
+            var budgetId = budgetItem.BudgetId;
+            var budget = db.Budgets.Find(budgetId);
+
+            switch (transaction.TransactionType)
+            {
+                case TransactionType.Deposit:
+                    // original steps when transaction was created:
+                    // bank account - increase current amount
+                    // budgetitem - do nothing
+                    // reverse these steps:
+                    bankAccount.CurrentBalance -= transaction.Amount;
+                    break;
+                 
+                case TransactionType.Withdrawal:
+                    // original steps when transaction was created:
+                    // Bank account - decrease current amount
+                    // Budget - increase current amount
+                    // BudgetItem - increase current amount
+                    // reverse these steps
+                    bankAccount.CurrentBalance += transaction.Amount;
+                    budget.CurrentAmount -= transaction.Amount;
+                    budgetItem.CurrentAmount -= transaction.Amount;
+                    break;
+
+                case TransactionType.Transfer:
+                default:
+                    // I'm not allowing them to void a transfer transaction, so do nothing.
+                    return;
+            }
+
+            transaction.IsDeleted = true;
+            db.SaveChanges();
             return;
         }
 
