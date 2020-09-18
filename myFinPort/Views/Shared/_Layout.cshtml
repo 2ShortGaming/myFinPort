@@ -5,11 +5,11 @@
 @using myFinPort.Helpers
 
 @{
-    BankAccountsHelper accountsHelper = new BankAccountsHelper();
-    BudgetsHelper budgetsHelper = new BudgetsHelper();
-    HouseholdHelper hhHelper = new HouseholdHelper();
-    UserRolesHelper rolesHelper = new UserRolesHelper();
-    UserHelper userHelper = new UserHelper();
+  BankAccountsHelper accountsHelper = new BankAccountsHelper();
+  BudgetsHelper budgetsHelper = new BudgetsHelper();
+  HouseholdHelper hhHelper = new HouseholdHelper();
+  UserRolesHelper rolesHelper = new UserRolesHelper();
+  UserHelper userHelper = new UserHelper();
 }
 
 <head>
@@ -164,8 +164,8 @@
           <!-- User profile text-->
           <div class="profile-text">
             <h5>@userHelper.GetFullName()</h5>
-            @*<a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><i class="mdi mdi-settings"></i></a>            
-            <a href="@Url.Action("Login","Account")" class="" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>*@
+            @*<a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><i class="mdi mdi-settings"></i></a>
+              <a href="@Url.Action("Login","Account")" class="" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>*@
           </div>
         </div>
         <!-- End User profile text-->
@@ -258,10 +258,12 @@
               @using (Html.BeginForm("LogOff", "Account"))
               {
                 @Html.AntiForgeryToken();
-                <div class="text-center">
+                <div class="text-center d-none d-xl-block">
                   <button class="btn btn-danger mb-3" type="submit"><i class="fa fa-power-off"></i> Logout</button>
                 </div>
-              }
+                <div class="text-center d-xl-none">
+                  <button class="btn btn-danger btn-sm btn-rounded mb-3" type="submit"><i class="fa fa-power-off"></i></button>
+                </div>}
             </li>
             @if (rolesHelper.IsUserInRole(User.Identity.GetUserId(), "Head") ||
                  rolesHelper.IsUserInRole(User.Identity.GetUserId(), "Member"))
@@ -270,8 +272,11 @@
                 @using (Html.BeginForm("LeaveAsync", "Households"))
                 {
                   @Html.AntiForgeryToken();
-                  <div class="text-center">
+                  <div class="text-center d-none d-xl-block">
                     <button class="btn btn-dark" type="submit"><i class="mdi mdi-account-remove"></i> Leave Household</button>
+                  </div>
+                  <div class="text-center d-xl-none">
+                    <button class="btn btn-dark btn-sm btn-rounded" type="submit"><i class="mdi mdi-account-remove"></i></button>
                   </div>
                 }
               </li>
@@ -332,7 +337,7 @@
   <div id="invite-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
       <div class="modal-content">
-        @using (Html.BeginForm("Create", "Budgets"))
+        @using (Html.BeginForm("CreateInvitation", "Invitations"))
         {
           @Html.AntiForgeryToken()
 

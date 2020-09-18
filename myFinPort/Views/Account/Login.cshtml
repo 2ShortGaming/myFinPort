@@ -86,7 +86,6 @@
                   <label for="minimal-checkbox-1">  Remember me? </label>
                 </div>
                 <div class="col-4">
-                  <!-- TODO: Need to style the Account/ForgotPassword view -->
                   @Html.ActionLink("Forgot pwd?", "ForgotPassword", "Account", null, new { @class = "text-info pull-right" })
 
                 </div>
@@ -110,17 +109,20 @@
             </div>
           </div>
 
-          <div class="form-group m-b-0">
+          <!-- Uncomment the Demo Login code if I decide to add Demo logins-->
+
+          @*<div class="form-group m-b-0">
             <div class="col-sm-12 text-center">
               <div>
                 Try a demo login?
                 @Html.ActionLink("Demo Login", "DemoLogin", "Account", null, new { @class = "text-info m-l-5" })
               </div>
             </div>
-          </div>
+          </div>*@
 
-          <hr />
+          <!-- Uncomment Social Account Authentication code below if I decide to implement that -->
 
+          @*<hr />
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
               <p class="mb-2">Authenticate with a social account?</p>
@@ -128,13 +130,10 @@
                 <section id="socialLoginForm">
                   <a href="javascript:void(0)" class="btn  btn-facebook" data-toggle="tooltip" title="Login with Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>
                   <a href="javascript:void(0)" class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fa fa-google-plus"></i> </a>
-
-                  <!-- TODO: need to create and style the _externalLoginsListPartial view -->
-                  @*@Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })*@
                 </section>
               </div>
             </div>
-          </div>
+          </div>*@
 
 
         </div>

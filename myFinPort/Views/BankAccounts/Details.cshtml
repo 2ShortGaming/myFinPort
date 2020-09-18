@@ -1,85 +1,90 @@
 ﻿@model myFinPort.Models.BankAccount
 
 @{
-    ViewBag.Title = "Details";
+  ViewBag.Title = "Details";
 }
 
 
 <div class="container">
-<h2>Details</h2>
-<div>
-    <h4>BankAccount</h4>
-    <hr />
-    <dl class="dl-horizontal">
-      <dt>
-        @Html.DisplayNameFor(model => model.AccountName)
-      </dt>
+  <div class="row">
+    <div class="col-6">
+      <div class="card px-3">
+        <div>
+          <h4>Bank Account Details</h4>
+          <hr />
+          <dl class="dl-horizontal">
+            <dt>
+              @Html.DisplayNameFor(model => model.AccountName)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.AccountName)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.AccountName)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.AccountType)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.AccountType)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.AccountType)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.AccountType)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.Owner.Email)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.Owner.Email)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.Owner.Email)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.Owner.Email)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.Created)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.Created)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.Created)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.Created)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.StartingBalance)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.StartingBalance)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.StartingBalance)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.StartingBalance)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.CurrentBalance)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.CurrentBalance)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.CurrentBalance)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.CurrentBalance)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.WarningBalance)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.WarningBalance)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.WarningBalance)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.WarningBalance)
+            </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.IsDeleted)
-      </dt>
+            <dt>
+              @Html.DisplayNameFor(model => model.IsDeleted)
+            </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.IsDeleted)
-      </dd>
+            <dd>
+              @Html.DisplayFor(model => model.IsDeleted)
+            </dd>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index") |
-    @Html.ActionLink("Back to Dashboard", "Dashboard", "Home")
-</p>
+          </dl>
+        </div>
+        <p>
+          @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+          @Html.ActionLink("Back to List", "Index") |
+          @Html.ActionLink("Back to Dashboard", "Dashboard", "Home")
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

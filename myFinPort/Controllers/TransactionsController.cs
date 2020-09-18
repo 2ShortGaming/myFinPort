@@ -281,7 +281,7 @@ namespace myFinPort.Controllers
 
                 return RedirectToAction("Index");
             }
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
+            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName", transaction.AccountId);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "Email", transaction.OwnerId);
             return View(transaction);
@@ -294,6 +294,7 @@ namespace myFinPort.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
@@ -310,7 +311,7 @@ namespace myFinPort.Controllers
             Transaction transaction = db.Transactions.Find(id);
             db.Transactions.Remove(transaction);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         protected override void Dispose(bool disposing)

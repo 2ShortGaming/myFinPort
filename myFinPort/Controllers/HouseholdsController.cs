@@ -260,11 +260,14 @@ namespace myFinPort.Controllers
                     var memberCount = db.Users.Where(u => u.HouseholdId == user.HouseholdId).Count() - 1;
                     if(memberCount >= 1)
                     {
-                        TempData["Message"] = $"You are unable to leave the Household!  There are still <b>{memberCount}</b> other members in the household.  You must select one of them to assume your role!";
-                        // TODO: must create an "ExitDenied" action in this controller to deal with this next line.
-                        return RedirectToAction("ExitDenied");
+                        // if I get here, I am not the last person in the household.
+                        
+                        var members = db.Users.Where(u => u.HouseholdId == user.HouseholdId).ToList();
+                        ViewBag.NewHoH = new SelectList(members, "Id", "FullName");
+                        return View("ExitDenied");
                     }
 
+                    // this user is the last person in the household, so it's safe to "soft" delete the household.
                     // this is a "soft" delete.  record stays in the database, but you can limit access on the front end
                     user.Household.IsDeleted = true;
 
@@ -274,6 +277,18 @@ namespace myFinPort.Controllers
                     //db.Households.Remove(household);
 
                     user.HouseholdId = null;
+
+                    // Drew had this code because he wants the accounts to stay with the user, not be "household" acocunts
+                    // but I want the accounts to belong to the household (like for joint accounts).
+                    // so I will have to do something different here.
+                    // I'll need to think through it.
+                    //
+                    // remove the HouseholdId from all BankAccounts associated with this user.
+                    //foreach(var account in user.Accounts)
+                    //{
+                    //    account.HouseholdId = null;
+                    //}
+
                     db.SaveChanges();
 
                     rolesHelper.UpdateUserRole(userId, "New User");
@@ -282,6 +297,7 @@ namespace myFinPort.Controllers
 
                 case "Member":
                     user.HouseholdId = null;
+
                     db.SaveChanges();
 
                     rolesHelper.UpdateUserRole(userId, "New User");
@@ -315,26 +331,53 @@ namespace myFinPort.Controllers
             return View();
         }
 
+
+        // this is the post that catches the submit from the ChangeHead.cshtml view.
         [HttpPost, ActionName("ChangeHead")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeHeadAsync(string newHoH, bool leave)
         {
-            if (string.IsNullOrEmpty(newHoH))
+            if (string.IsNullOrEmpty(newHoH) || newHoH == User.Identity.GetUserId())
             {
                 return RedirectToAction("Dashboard", "Home");
             }
+
             var user = db.Users.Find(User.Identity.GetUserId());
-            rolesHelper.UpdateUserRole(newHoH, "Head");
-            if (leave)
+            var newHoHuser = db.Users.Find(newHoH);
+
+            if (user.HouseholdId != newHoHuser.HouseholdId)
             {
-                // TODO: He copied stuff and I couldn't keep up.
+                user.HouseholdId = newHoHuser.HouseholdId;
             }
 
-            user.HouseholdId = null;
-            db.SaveChanges();
+            rolesHelper.UpdateUserRole(newHoH, "Head");
 
-            rolesHelper.UpdateUserRole(User.Identity.GetUserId(), "New User");
-            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+            if (leave)
+            {
+                user.HouseholdId = null;
+
+                // Drew had this code because he wants the accounts to stay with the user, not be "household" acocunts
+                // but I want the accounts to belong to the household (like for joint accounts).
+                // so I will have to do something different here.
+                // I'll need to think through it.
+                //
+                // remove the HouseholdId from all BankAccounts associated with this user.
+                //foreach(var account in user.Accounts)
+                //{
+                //    account.HouseholdId = null;
+                //}
+
+                db.SaveChanges();
+
+                rolesHelper.UpdateUserRole(user.Id, "New User");
+                await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+            }
+            else
+            {
+                rolesHelper.UpdateUserRole(user.Id, "Member");
+                await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+            }
+
             return RedirectToAction("Dashboard", "Home");
         }
 

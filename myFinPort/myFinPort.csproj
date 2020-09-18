@@ -485,6 +485,7 @@
     <Content Include="Views\Transactions\CreateDeposit.cshtml" />
     <Content Include="Views\Transactions\CreateWithdrawal.cshtml" />
     <Content Include="Views\Transactions\CreateTransfer.cshtml" />
+    <None Include="Properties\PublishProfiles\myFinPort - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

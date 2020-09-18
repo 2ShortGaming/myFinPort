@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace myFinPort.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -42,9 +43,9 @@ namespace myFinPort.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -96,7 +97,7 @@ namespace myFinPort.Controllers
                     {
                         return RedirectToAction("BuildHouse", "Households");
                     }
-                    else 
+                    else
                     {
                         return RedirectToLocal(returnUrl);
                     }
@@ -140,7 +141,7 @@ namespace myFinPort.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -172,14 +173,14 @@ namespace myFinPort.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
-                { 
+                {
                     UserName = model.Email,
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName
                 };
 
-                if(model.Avatar != null)
+                if (model.Avatar != null)
                 {
                     if (FileUploadValidator.IsWebFriendlyImage(model.Avatar))
                     {
@@ -195,8 +196,8 @@ namespace myFinPort.Controllers
                 if (result.Succeeded)
                 {
                     rolesHelper.AddUserToRole(user.Id, "New User");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -219,13 +220,14 @@ namespace myFinPort.Controllers
             var realGuid = Guid.Parse(code);
             var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
 
-            if(invitation == null)
+            if (invitation == null)
             {
                 // TODO: need to create this view
                 return View("NotFoundError", invitation);
             }
+
             var expirationDate = invitation.Created.AddDays(invitation.TTL);
-            if(invitation.IsValid && DateTime.Now < expirationDate)
+            if (invitation.IsValid && DateTime.Now < expirationDate)
             {
                 var householdName = db.Households.Find(invitation.HouseholdId).HouseholdName;
                 ViewBag.Greeting = $"Thank you for accepting my invitation to join the {householdName} House!";
@@ -325,7 +327,8 @@ namespace myFinPort.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -333,10 +336,37 @@ namespace myFinPort.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+
+                var callbackUrl = Url.Action
+                (
+                    "ResetPassword",
+                    "Account",
+                    new { userId = user.Id, code = code },
+                    protocol: Request.Url.Scheme
+                );
+
+                try
+                {
+                    var from = "myFinPort<admin@myFinPort.com>";
+                    var email = new MailMessage(from, model.Email)
+                    {
+                        Subject = "Reset Password",
+                        Body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>",
+                        IsBodyHtml = true
+                    };
+
+                    var svc = new EmailService();
+                    await svc.SendAsync(email);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    await Task.FromResult(0);
+                }
+
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -514,7 +544,7 @@ namespace myFinPort.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Dashboard", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //
