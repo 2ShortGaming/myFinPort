@@ -17,8 +17,18 @@
           <div class="row">
             <div class="col-6">
               <div class="card bg-light px-3">
-                <div class="card-title text-center">
-                  <h3 class="mt-2">Details</h3>
+                <div class="card-title">
+                  <div class="row align-content-center justify-content-center mt-2">
+                    <div class="col-3 align-bottom">
+                      <h3>Details</h3>
+                    </div>
+                    <div class="col-1">
+                      <a class="model_img img-responsive" data-toggle="modal" data-target="#editBudget"><i class="ml-1 ti-pencil-alt text-danger"></i></a>
+                    </div>
+                    <div class="col-1">
+                      <a class="model_img img-responsive" data-toggle="modal" data-target="#deleteBudget"><i class="ml-1 mdi mdi-delete text-danger"></i></a>
+                    </div>
+                  </div>
                 </div>
                 <dl class="dl-horizontal">
                   <dt>
@@ -70,14 +80,7 @@
                       @Html.DisplayFor(model => model.Created)
                     </div>
                   </dd>
-
-
-
                 </dl>
-                <p>
-                  @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                  @Html.ActionLink("Back to List", "Index")
-                </p>
               </div>
             </div>
             <div class="col-6">
@@ -93,7 +96,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  @if(budgetItemsHelper.BudgetItemsCount(Model.Id) == 0)
+                  @if (budgetItemsHelper.BudgetItemsCount(Model.Id) == 0)
                   {
                     <p>
                       There have been no Budget Items set up for this Budget yet.
@@ -107,35 +110,35 @@
                   else
                   {
                     <div class="table-responsive">
-                    <table class="table earning-box">
-                      <thead>
-                        <tr class="text-success">
-                          <th>Name</th>
-                          <th>Target</th>
-                          <th>Current</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @foreach (var item in budgetItemsHelper.ListBudgetItemsForBudget(Model.Id))
-                        {                         
-                          if (!item.IsDeleted)
-                          {
-                          <tr class="text-purple">
-                            <td>@item.ItemName</td>
-                            <td>@string.Format("{0:C}", item.TargetAmount)</td>
-                            <td>@string.Format("{0:C}", item.CurrentAmount)</td>
-                            <td>
-                              <a class="model_img img-responsive" data-toggle="modal" data-target="#editBI-@item.Id"><i class="ml-1 ti-pencil-alt text-danger"></i></a>
-                              <a class="model_img img-responsive" data-toggle="modal" data-target="#deleteBI-@item.Id"><i class="ml-1 mdi mdi-delete text-danger"></i></a>
-                            </td>
+                      <table class="table earning-box">
+                        <thead>
+                          <tr class="text-success">
+                            <th>Name</th>
+                            <th>Target</th>
+                            <th>Current</th>
+                            <th></th>
                           </tr>
+                        </thead>
+                        <tbody>
+                          @foreach (var item in budgetItemsHelper.ListBudgetItemsForBudget(Model.Id))
+                          {
+                            if (!item.IsDeleted)
+                            {
+                              <tr class="text-purple">
+                                <td>@item.ItemName</td>
+                                <td>@string.Format("{0:C}", item.TargetAmount)</td>
+                                <td>@string.Format("{0:C}", item.CurrentAmount)</td>
+                                <td>
+                                  <a class="model_img img-responsive" data-toggle="modal" data-target="#editBI-@item.Id"><i class="ml-1 ti-pencil-alt text-danger"></i></a>
+                                  <a class="model_img img-responsive" data-toggle="modal" data-target="#deleteBI-@item.Id"><i class="ml-1 mdi mdi-delete text-danger"></i></a>
+                                </td>
+                              </tr>
+                            }
                           }
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                  }                
+                        </tbody>
+                      </table>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -187,33 +190,61 @@
 {
   if (!item.IsDeleted)
   {
-  <div id="editBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Edit Budget Item</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        </div>
-        <div class="modal-body">
-          @Html.Action("_EditBudgetItemModal", "BudgetItems", new { @id = item.Id })
+    <div id="editBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Budget Item</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+          <div class="modal-body">
+            @Html.Action("_EditBudgetItemModal", "BudgetItems", new { @id = item.Id })
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="deleteBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Delete Budget Item</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        </div>
-        <div class="modal-body">
-          @Html.Action("_DeleteBudgetItemModal", "BudgetItems", new { @id = item.Id })
+    <div id="deleteBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Budget Item</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+          <div class="modal-body">
+            @Html.Action("_DeleteBudgetItemModal", "BudgetItems", new { @id = item.Id })
+          </div>
         </div>
       </div>
     </div>
-  </div>
   }
 }
+
+<div id="editBudget" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Budget Settings</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        @Html.Action("_EditBudgetModal", "Budgets", new { Model.Id })
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="deleteBudget" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Budget</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        @Html.Action("_DeleteBudgetModal", "Budgets", new { Model.Id })
+      </div>
+    </div>
+  </div>
+</div>
 

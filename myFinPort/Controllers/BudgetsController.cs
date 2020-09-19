@@ -132,7 +132,7 @@ namespace myFinPort.Controllers
             Budget budget = db.Budgets.Find(id);
             db.Budgets.Remove(budget);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         protected override void Dispose(bool disposing)
@@ -142,6 +142,38 @@ namespace myFinPort.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // PARTIAL VIEWS
+
+        public PartialViewResult _EditBudgetModal(int id)
+        {
+            var model = db.Budgets.Find(id);
+
+            return PartialView(model);
+        }
+
+        // POST: _EditBudgetModal/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _EditBudgetModal([Bind(Include = "Id,BudgetName,CurrentAmount")] Budget model)
+        {
+            var budget = db.Budgets.Find(model.Id);
+
+            budget.BudgetName = model.BudgetName;
+            budget.CurrentAmount = model.CurrentAmount;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Budgets", new { Id = model.Id });
+        }
+
+        public PartialViewResult _DeleteBudgetModal(int id)
+        {
+            var model = db.Budgets.Find(id);
+
+            return PartialView(model);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace myFinPort.Extensions
                     // reverse these steps:
                     bankAccount.CurrentBalance -= transaction.Amount;
                     break;
-                 
+
                 case TransactionType.Withdrawal:
                     // original steps when transaction was created:
                     // Bank account - decrease current amount

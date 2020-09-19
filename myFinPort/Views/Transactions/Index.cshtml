@@ -7,66 +7,76 @@
 @*<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />*@
 
 <div class="container">
-  <h2>List of Transactions</h2>
-
-  <div class="table-responsive">
-    <table id="TransactionsTable" class="table m-t-30 table-hover no-wrap contact-list display">
-      <thead>
-        <tr>
-          <th class="text-blue">
-            @Html.DisplayNameFor(model => model.Account.AccountName)
-          </th>
-          <th class="text-blue">
-            @Html.DisplayNameFor(model => model.TransactionType)
-          </th>
-          <th class="text-blue">
-            @Html.DisplayNameFor(model => model.Created)
-          </th>
-          <th class="text-blue">
-            @Html.DisplayNameFor(model => model.Amount)
-          </th>
-          <th class="text-blue">
-            @Html.DisplayNameFor(model => model.Memo)
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach (var item in Model.OrderByDescending(b => b.Created).ToList())
-        {
-          if (item.IsDeleted)
-          {
-            continue;
-          }
-          <tr>
-            <td class="text-light">
-              @Html.DisplayFor(modelItem => item.Account.AccountName)
-            </td>
-            <td class="text-light">
-              @Html.DisplayFor(modelItem => item.TransactionType)
-            </td>
-            <td class="text-light">
-              @item.Created.ToString("dd MMM yyyy")
-            </td>
-            <td class="text-light">
-              @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td class="text-light">
-              @Html.DisplayFor(modelItem => item.Memo)
-            </td>
-            <td class="text-light">
-              @if(item.TransactionType != myFinPort.Enums.TransactionType.Transfer)
-              {
-                  @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <span>|</span>
-                  @Html.ActionLink("Void", "Delete", new { id = item.Id })
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h2>List of Transactions</h2>
+        </div>
+        <div class="row justify-content-center">
+          <div class="card-body col-11">
+            <div class="table-responsive">
+              <table id="TransactionsTable" class="table m-t-30 table-hover no-wrap contact-list display">
+                <thead>
+                  <tr>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.TransactionType)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.Memo)
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach (var item in Model.OrderByDescending(b => b.Created).ToList())
+                  {
+                    if (item.IsDeleted)
+                    {
+                      continue;
+                    }
+                    <tr>
+                      <td class="text-light">
+                        @Html.DisplayFor(modelItem => item.Account.AccountName)
+                      </td>
+                      <td class="text-light">
+                        @Html.DisplayFor(modelItem => item.TransactionType)
+                      </td>
+                      <td class="text-light">
+                        @item.Created.ToString("dd MMM yyyy")
+                      </td>
+                      <td class="text-light">
+                        @Html.DisplayFor(modelItem => item.Amount)
+                      </td>
+                      <td class="text-light">
+                        @Html.DisplayFor(modelItem => item.Memo)
+                      </td>
+                      <td class="text-light">
+                        @if (item.TransactionType != myFinPort.Enums.TransactionType.Transfer)
+                        {
+                          @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <span>|</span>
+                          @Html.ActionLink("Void", "Delete", new { id = item.Id })
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>
 
 @section Scripts {
@@ -76,4 +86,4 @@
       $('#TransactionsTable').DataTable();
     })
   </script>
-  }
+}

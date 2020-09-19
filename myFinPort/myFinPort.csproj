@@ -489,6 +489,9 @@
     <None Include="Properties\PublishProfiles\myFinPort - Web Deploy.pubxml" />
     <Content Include="Views\BudgetItems\_EditBudgetItemModal.cshtml" />
     <Content Include="Views\BudgetItems\_DeleteBudgetItemModal.cshtml" />
+    <Content Include="Views\Budgets\_EditBudgetModal.cshtml" />
+    <Content Include="Views\Budgets\_DeleteBudgetItemModal.cshtml" />
+    <Content Include="Views\Budgets\_DeleteBudgetModal.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

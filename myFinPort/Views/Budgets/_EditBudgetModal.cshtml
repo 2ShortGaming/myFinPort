@@ -1,27 +1,18 @@
-﻿@model myFinPort.Models.BudgetItem
+﻿@model myFinPort.Models.Budget
 
-@using (Html.BeginForm("_EditBudgetItemModal", "BudgetItems"))
+@using (Html.BeginForm("_EditBudgetModal", "Budgets"))
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
   @Html.HiddenFor(model => model.Id)
-  @Html.HiddenFor(model => model.BudgetId)
 
   <div class="form-group">
-    @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-10 text-success" })
+    @Html.LabelFor(model => model.BudgetName, htmlAttributes: new { @class = "control-label col-md-10 text-success" })
     <div class="col-md-10">
-      @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
-      @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(model => model.TargetAmount, htmlAttributes: new { @class = "control-label col-md-10 text-success" })
-    <div class="col-md-10">
-      @Html.EditorFor(model => model.TargetAmount, new { htmlAttributes = new { @class = "form-control" } })
-      @Html.ValidationMessageFor(model => model.TargetAmount, "", new { @class = "text-danger" })
+      @Html.EditorFor(model => model.BudgetName, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.BudgetName, "", new { @class = "text-danger" })
     </div>
   </div>
 

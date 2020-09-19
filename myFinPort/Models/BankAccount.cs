@@ -20,7 +20,7 @@ namespace myFinPort.Models
 
         public virtual ApplicationUser Owner { get; set; }
 
-        [Display(Name = "Bank Account Name")]
+        [Display(Name = "Account Name")]
         public string AccountName { get; set; }
 
         public DateTime Created { get; set; }

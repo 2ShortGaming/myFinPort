@@ -49,8 +49,6 @@ namespace myFinPort.Controllers
             return View();
         }
 
-
-
         // POST: Transactions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -257,7 +255,7 @@ namespace myFinPort.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
+            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName", transaction.Account);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "Email", transaction.OwnerId);
             return View(transaction);
@@ -272,15 +270,29 @@ namespace myFinPort.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldTransaction = db.Transactions.AsNoTracking(); // this is a hint, not complete line of code
-                db.Entry(transaction).State = EntityState.Modified;
+                var oldTransaction = db.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+                oldTransaction.VoidTransaction();
                 db.SaveChanges();
 
-                //var newTransaction = db.Transactions.AsNoTracking(); // this is a hint, not complete line of code
-                /*newTransaction.EditTransaction(oldTransaction);*/
+                var newTransaction = new Transaction()
+                {
+                    AccountId = transaction.AccountId,
+                    BudgetItemId = transaction.BudgetItemId,
+                    OwnerId = transaction.OwnerId,
+                    TransactionType = transaction.TransactionType,
+                    Created = transaction.Created,
+                    Amount = transaction.Amount,
+                    Memo = transaction.Memo,
+                    IsDeleted = false
+                };
 
+                db.Transactions.Add(newTransaction);
+                db.SaveChanges();
+                newTransaction.UpdateBalances();  
+                
                 return RedirectToAction("Index");
             }
+
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName", transaction.AccountId);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "Email", transaction.OwnerId);
@@ -311,7 +323,7 @@ namespace myFinPort.Controllers
             Transaction transaction = db.Transactions.Find(id);
             transaction.VoidTransaction();
             db.SaveChanges();
-            return RedirectToAction("Dashboard", "Home");
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

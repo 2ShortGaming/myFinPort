@@ -51,19 +51,20 @@
                 </div>
               </dd>
             </dl>
-
-            @using (Html.BeginForm("_DeleteBudgetItemModal"))
-            {
-              @Html.AntiForgeryToken()
-              @Html.HiddenFor(model => model.Id)
-              @Html.HiddenFor(model => model.BudgetId)
+            <div class="modal-footer">
+              @using (Html.BeginForm("_DeleteBudgetItemModal"))
+              {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.BudgetId)
               <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-danger mr-2" />
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-light" });
+                @Html.ActionLink("Cancel", "Details", "Budgets", new { Id = Model.BudgetId }, new { @class = "btn btn-light waves-effect mr-2" })
+                <button type="submit" class="btn btn-danger waves-effect waves-light">Delete Budget Item</button>
               </div>
-            }
-          </div>         
-        </div>
+              }
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

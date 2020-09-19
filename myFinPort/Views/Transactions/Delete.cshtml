@@ -35,7 +35,7 @@
 
                   <dd>
                     <div class="col-12 card bg-success text-dark p-1">
-                      @string.Format("{0:C}", Model.Amount)                      
+                      @string.Format("{0:C}", Model.Amount)
                     </div>
                   </dd>
 
@@ -112,24 +112,28 @@
                 </div>
 
               </div>
-
             </div>
           </div>
-        <div class="row">
-          <div class="col-12">
-            @using (Html.BeginForm())
-            {
-              @Html.AntiForgeryToken()
 
-              <div class="form-actions no-color">
-                <input type="submit" value="Void Transaction" class="btn btn-danger mr-2" />
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-light" });
-              </div>
-            }
+          <div class="row">
+            <div class="col-12">
+              @using (Html.BeginForm())
+              {
+                @Html.AntiForgeryToken()
+
+                <div class="col-md-12">
+                  <div class="row justify-content-end">
+                    <div class="form-actions no-color">
+                      @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-light mr-2" })
+                      <input type="submit" value="Void Transaction" class="btn btn-danger mr-2" />
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
