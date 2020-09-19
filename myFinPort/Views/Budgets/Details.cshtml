@@ -1,59 +1,219 @@
-﻿@model myFinPort.Models.Budget
+﻿@using myFinPort.Helpers
+@model myFinPort.Models.Budget
 
 @{
-    ViewBag.Title = "Details";
+  ViewBag.Title = "Details";
+  BudgetItemsHelper budgetItemsHelper = new BudgetItemsHelper();
 }
 
 <div class="container">
-  <h2>Details</h2>
-  <div>
-    <h4>Budget</h4>
-    <hr />
-    <dl class="dl-horizontal">
-      <dt>
-        @Html.DisplayNameFor(model => model.Household.HouseholdName)
-      </dt>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h2>Budget Details</h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="card bg-light px-3">
+                <div class="card-title text-center">
+                  <h3 class="mt-2">Details</h3>
+                </div>
+                <dl class="dl-horizontal">
+                  <dt>
+                    <span>Budget Name</span>
+                  </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.Household.HouseholdName)
-      </dd>
+                  <dd>
+                    <div class="col-11 card bg-success text-dark p-1">
+                      @Html.DisplayFor(model => model.BudgetName)
+                    </div>
+                  </dd>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.Owner.Email)
-      </dt>
+                  <dt>
+                    @Html.DisplayNameFor(model => model.CurrentAmount)
+                  </dt>
 
-      <dd>
-        @Html.DisplayFor(model => model.Owner.Email)
-      </dd>
+                  <dd>
+                    <div class="col-11 card bg-success text-dark p-1">
+                      @string.Format("{0:C}", Model.CurrentAmount)
+                      @*@Html.DisplayFor(model => model.CurrentAmount)*@
+                    </div>
+                  </dd>
+                  <dt>
+                    <span>Household Name</span>
+                  </dt>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.Created)
-      </dt>
+                  <dd>
+                    <div class="col-11 card bg-success text-dark p-1">
+                      @Html.DisplayFor(model => model.Household.HouseholdName)
+                    </div>
+                  </dd>
 
-      <dd>
-        @Html.DisplayFor(model => model.Created)
-      </dd>
+                  <dt>
+                    @Html.DisplayNameFor(model => model.Owner.Email)
+                  </dt>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.BudgetName)
-      </dt>
+                  <dd>
+                    <div class="col-11 card bg-success text-dark p-1">
+                      @Html.DisplayFor(model => model.Owner.Email)
+                    </div>
+                  </dd>
 
-      <dd>
-        @Html.DisplayFor(model => model.BudgetName)
-      </dd>
+                  <dt>
+                    @Html.DisplayNameFor(model => model.Created)
+                  </dt>
 
-      <dt>
-        @Html.DisplayNameFor(model => model.CurrentAmount)
-      </dt>
+                  <dd>
+                    <div class="col-11 card bg-success text-dark p-1">
+                      @Html.DisplayFor(model => model.Created)
+                    </div>
+                  </dd>
 
-      <dd>
-        @Html.DisplayFor(model => model.CurrentAmount)
-      </dd>
 
-    </dl>
+
+                </dl>
+                <p>
+                  @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                  @Html.ActionLink("Back to List", "Index")
+                </p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card bg-light px-2">
+                <div class="card-title text-center mt-2">
+                  <div class="row mt-2 text-center align-content-center justify-content-center">
+                    <div class="col-4">
+                      <h3 class="mt-2">Budget Items</h3>
+                    </div>
+                    <div class="col-1 align-self-center">
+                      <a class="model_img img-responsive" data-toggle="modal" data-target="#newBI"><i class="ml-1 fa fa-plus-square-o text-danger"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  @if(budgetItemsHelper.BudgetItemsCount(Model.Id) == 0)
+                  {
+                    <p>
+                      There have been no Budget Items set up for this Budget yet.
+                    </p>
+                    <p>
+                      If you would like to create Budget Items for this Budget,
+                      click the ' <i class="fa fa-plus-square-o"></i> ' icon above and a create form
+                      will be provided to you.
+                    </p>
+                  }
+                  else
+                  {
+                    <div class="table-responsive">
+                    <table class="table earning-box">
+                      <thead>
+                        <tr class="text-success">
+                          <th>Name</th>
+                          <th>Target</th>
+                          <th>Current</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (var item in budgetItemsHelper.ListBudgetItemsForBudget(Model.Id))
+                        {                         
+                          if (!item.IsDeleted)
+                          {
+                          <tr class="text-purple">
+                            <td>@item.ItemName</td>
+                            <td>@string.Format("{0:C}", item.TargetAmount)</td>
+                            <td>@string.Format("{0:C}", item.CurrentAmount)</td>
+                            <td>
+                              <a class="model_img img-responsive" data-toggle="modal" data-target="#editBI-@item.Id"><i class="ml-1 ti-pencil-alt text-danger"></i></a>
+                              <a class="model_img img-responsive" data-toggle="modal" data-target="#deleteBI-@item.Id"><i class="ml-1 mdi mdi-delete text-danger"></i></a>
+                            </td>
+                          </tr>
+                          }
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                  }                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-  </p>
 </div>
+
+<div id="newBI" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      @using (Html.BeginForm("NewBudgetItem", "BudgetItems", new { @id = @Model.Id }))
+      {
+        @Html.AntiForgeryToken()
+
+        <div class="modal-header">
+          <h4 class="modal-title">New Budget Item</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="control-label">Budget Item Name</label>
+            @Html.Editor("BudgetItemName", new { htmlAttributes = new { @class = "form-control" } })
+            <small class="form-control-feedback"> Enter the Budget Item Name </small>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Target Amount</label>
+            @Html.Editor("TargetAmount", new { htmlAttributes = new { @class = "form-control" } })
+            <small class="form-control-feedback"> Enter the Budget Item's Target Amount </small>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger waves-effect waves-light">Add</button>
+        </div>
+
+      }
+    </div>
+  </div>
+</div>
+
+@foreach (var item in budgetItemsHelper.ListBudgetItemsForBudget(Model.Id))
+{
+  if (!item.IsDeleted)
+  {
+  <div id="editBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Budget Item</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          @Html.Action("_EditBudgetItemModal", "BudgetItems", new { @id = item.Id })
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="deleteBI-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Budget Item</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          @Html.Action("_DeleteBudgetItemModal", "BudgetItems", new { @id = item.Id })
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+}
+

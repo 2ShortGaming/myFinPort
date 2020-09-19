@@ -1,0 +1,48 @@
+﻿@model myFinPort.Models.BudgetItem
+
+@using (Html.BeginForm("_EditBudgetItemModal", "BudgetItems"))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+  @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+  @Html.HiddenFor(model => model.Id)
+  @Html.HiddenFor(model => model.BudgetId)
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.TargetAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.EditorFor(model => model.TargetAmount, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.TargetAmount, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.CurrentAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.EditorFor(model => model.CurrentAmount, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.CurrentAmount, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light waves-effect mr-2" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-danger waves-effect waves-light">Save Changes</button>
+  </div>
+
+  @*<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+  </div>*@
+</div>
+}
+

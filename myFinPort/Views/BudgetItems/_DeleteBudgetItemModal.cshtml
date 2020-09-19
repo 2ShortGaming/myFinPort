@@ -1,0 +1,70 @@
+﻿@model myFinPort.Models.BudgetItem
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 mx-1">
+      <div class="card bg-light">
+        <div class="card-header">
+          <h3 class="text-danger">Are you sure you want to delete this Budget Item?</h3>
+        </div>
+        <div class="card-body">
+          <div>
+            <dl class="dl-horizontal">
+              <dt>
+                @Html.DisplayNameFor(model => model.Created)
+              </dt>
+
+              <dd>
+                <div class="col-12 card bg-success text-dark p-1">
+                  @Html.DisplayFor(model => model.Created)
+                </div>
+              </dd>
+
+              <dt>
+                @Html.DisplayNameFor(model => model.ItemName)
+              </dt>
+
+              <dd>
+                <div class="col-12 card bg-success text-dark p-1">
+                  @Html.DisplayFor(model => model.ItemName)
+                </div>
+              </dd>
+
+              <dt>
+                @Html.DisplayNameFor(model => model.TargetAmount)
+              </dt>
+
+              <dd>
+                <div class="col-12 card bg-success text-dark p-1">
+                  @Html.DisplayFor(model => model.TargetAmount)
+                </div>
+              </dd>
+
+              <dt>
+                @Html.DisplayNameFor(model => model.CurrentAmount)
+              </dt>
+
+              <dd>
+                <div class="col-12 card bg-success text-dark p-1">
+                  @Html.DisplayFor(model => model.CurrentAmount)
+                </div>
+              </dd>
+            </dl>
+
+            @using (Html.BeginForm("_DeleteBudgetItemModal"))
+            {
+              @Html.AntiForgeryToken()
+              @Html.HiddenFor(model => model.Id)
+              @Html.HiddenFor(model => model.BudgetId)
+              <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-danger mr-2" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-light" });
+              </div>
+            }
+          </div>         
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>

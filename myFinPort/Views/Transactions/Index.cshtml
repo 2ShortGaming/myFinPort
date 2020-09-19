@@ -32,8 +32,12 @@
         </tr>
       </thead>
       <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderByDescending(b => b.Created).ToList())
         {
+          if (item.IsDeleted)
+          {
+            continue;
+          }
           <tr>
             <td class="text-light">
               @Html.DisplayFor(modelItem => item.Account.AccountName)

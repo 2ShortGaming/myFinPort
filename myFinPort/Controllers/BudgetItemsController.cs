@@ -61,6 +61,22 @@ namespace myFinPort.Controllers
             return View(budgetItem);
         }
 
+        // Post: BudgetItems/NewBudgetItem
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Head, Member")]
+        public ActionResult NewBudgetItem(string budgetItemName, decimal targetAmount, int Id)
+        {
+            var budgetItem = new BudgetItem();
+            budgetItem.BudgetId = Id;
+            budgetItem.TargetAmount = targetAmount;
+            budgetItem.ItemName = budgetItemName;
+            db.BudgetItems.Add(budgetItem);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Budgets", new { Id = Id });
+        }
+
         // GET: BudgetItems/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -127,6 +143,56 @@ namespace myFinPort.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // PARTIAL VIEWS
+
+        public PartialViewResult _EditBudgetItemModal(int id)
+        {
+            var model = db.BudgetItems.Find(id);
+
+            return PartialView(model);
+        }
+
+
+        // POST: _EditBudgetItemModal/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _EditBudgetItemModal([Bind(Include = "Id,BudgetId,ItemName,TargetAmount,CurrentAmount")] BudgetItem model)
+        {
+            var budgetItem = db.BudgetItems.Find(model.Id);
+
+            budgetItem.ItemName = model.ItemName;
+            budgetItem.TargetAmount = model.TargetAmount;
+            budgetItem.CurrentAmount = model.CurrentAmount;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Budgets", new { Id = model.BudgetId });
+        }
+
+        public PartialViewResult _DeleteBudgetItemModal(int id)
+        {
+            var model = db.BudgetItems.Find(id);
+
+            return PartialView(model);
+        }
+
+
+        // POST: _EditBudgetItemModal/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _DeleteBudgetItemModal([Bind(Include = "Id,BudgetId")] BudgetItem model)
+        {
+            var budgetItem = db.BudgetItems.Find(model.Id);
+
+            budgetItem.IsDeleted = true;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Budgets", new { Id = model.BudgetId });
         }
     }
 }

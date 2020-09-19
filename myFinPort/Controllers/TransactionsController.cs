@@ -309,7 +309,7 @@ namespace myFinPort.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Transaction transaction = db.Transactions.Find(id);
-            db.Transactions.Remove(transaction);
+            transaction.VoidTransaction();
             db.SaveChanges();
             return RedirectToAction("Dashboard", "Home");
         }

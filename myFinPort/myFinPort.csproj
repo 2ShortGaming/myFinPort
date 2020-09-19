@@ -187,6 +187,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BankAccountsHelper.cs" />
+    <Compile Include="Helpers\BudgetItemsHelper.cs" />
     <Compile Include="Helpers\BudgetsHelper.cs" />
     <Compile Include="Helpers\FileStamp.cs" />
     <Compile Include="Helpers\FileUploadValidator.cs" />
@@ -486,6 +487,8 @@
     <Content Include="Views\Transactions\CreateWithdrawal.cshtml" />
     <Content Include="Views\Transactions\CreateTransfer.cshtml" />
     <None Include="Properties\PublishProfiles\myFinPort - Web Deploy.pubxml" />
+    <Content Include="Views\BudgetItems\_EditBudgetItemModal.cshtml" />
+    <Content Include="Views\BudgetItems\_DeleteBudgetItemModal.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
