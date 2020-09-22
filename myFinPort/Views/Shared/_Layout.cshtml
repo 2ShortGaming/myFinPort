@@ -194,10 +194,13 @@
                 {
                   foreach (var account in accountsHelper.ListHHBankAccounts())
                   {
-                    <li>
-                      @Html.ActionLink(account.AccountName, "Details", "BankAccounts", new { Id = account.Id }, null)
-                      @*<a href="app-calendar.html">@account.AccountName</a>*@
-                    </li>
+                    if (!account.IsDeleted)
+                    {
+                      <li>
+                        @Html.ActionLink(account.AccountName, "Details", "BankAccounts", new { Id = account.Id }, null)
+                        @*<a href="app-calendar.html">@account.AccountName</a>*@
+                      </li>
+                    }
                   }
                 }
               </ul>
@@ -299,12 +302,12 @@
       <!-- ============================================================== -->
       <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-          <h3 class="text-themecolor">Dashboard</h3>
+          <h3 class="text-themecolor">@ViewContext.RouteData.Values["controller"].ToString()</h3>
         </div>
         <div class="col-md-7 align-self-center">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">@ViewContext.RouteData.Values["controller"].ToString()</a></li>
+            <li class="breadcrumb-item active">@ViewContext.RouteData.Values["action"].ToString()</li>
           </ol>
         </div>
       </div>
@@ -416,6 +419,7 @@
   <script src="~/Scripts/jquery.steps.min.js"></script>
   <script src="~/Scripts/jquery.validate.min.js"></script>
   <script src="~/Scripts/sweetalert.min.js"></script>
+  <script src="~/Scripts/jquery.sweet-alert.custom.js"></script>
   <script src="~/Scripts/steps.js"></script>
   <script src="~/Scripts/icheck.min.js"></script>
   <script src="~/Scripts/icheck.init.js"></script>

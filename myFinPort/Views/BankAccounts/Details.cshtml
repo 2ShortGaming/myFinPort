@@ -10,7 +10,16 @@
     <div class="col-8">
       <div class="card">
         <div class="card-header">
-          <h4>Bank Account Details</h4>
+          <div class="row justify-content-between align-content-center">
+            <div class="col-5">
+              <h4 class="ml-2">Bank Account Details</h4>
+            </div>
+            <div class="col-2">
+              <div class="model_img img-responsive">
+                <i class="ml-1 mdi mdi-delete text-danger" id="delete-warning"></i>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="card-body">
           <dl class="dl-horizontal">
@@ -21,7 +30,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @Html.DisplayFor(model => model.AccountName)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -31,7 +40,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @Html.DisplayFor(model => model.AccountType)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -41,7 +50,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @Html.DisplayFor(model => model.Owner.Email)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -51,7 +60,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @Html.DisplayFor(model => model.Created)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -61,7 +70,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @string.Format("{0:C}", Model.StartingBalance)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -71,7 +80,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @string.Format("{0:C}", Model.CurrentBalance)
-                </div>
+              </div>
             </dd>
 
             <dt>
@@ -81,7 +90,7 @@
             <dd>
               <div class="col-10 card bg-success text-dark p-1">
                 @string.Format("{0:C}", Model.WarningBalance)
-                </div>
+              </div>
             </dd>
           </dl>
         </div>
@@ -89,3 +98,44 @@
     </div>
   </div>
 </div>
+
+@section Scripts {
+  <script>
+    //initializing
+    $(document).ready(function () {
+      "use strict";
+      $.SweetAlert.init()
+    })
+
+    $('#delete-warning').click(function () {
+      swal({
+        title: "Are you sure?",
+        text: "You will not be able to recover this account after deleting it!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+      },
+        function () {
+              confirmDelete();
+            swal("Deleted!", "The account has been deleted.", "success");
+        })
+    });
+
+    function confirmDelete() {
+      $.post("@Url.Action("DeleteConfirmed", "BankAccounts", new { Id = @Model.Id })");
+    }
+
+  </script>
+}
+
+
+          @*$.ajax({
+            url: "@Url.Action("DeleteConfirmed", "BankAccounts", new { Id = @Model.Id })",
+            type: "post",
+            success: function () { swal("Deleted!", "The account has been deleted.", "success"); },
+            error: function (xhr, ajaxOptions, thrownError) { swal("Error!", "Something went wrong!", "error"); }
+            })*@
+
+

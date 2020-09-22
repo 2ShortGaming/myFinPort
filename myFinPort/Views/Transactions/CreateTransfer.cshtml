@@ -27,7 +27,7 @@
 
 
               <div class="form-group">
-                @Html.LabelFor(model => model.FromBankAccountId, "FromBankAccountId", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
+                @Html.LabelFor(model => model.FromBankAccountId, "From Bank Account:", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
                 <div class="col-md-12">
                   @Html.DropDownList("FromBankAccountId", null, htmlAttributes: new { @class = "form-control" })
                   @Html.ValidationMessageFor(model => model.FromBankAccountId, "", new { @class = "text-danger" })
@@ -35,7 +35,7 @@
               </div>
 
               <div class="form-group">
-                @Html.LabelFor(model => model.ToBankAccountId, "ToBankAccountId", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
+                @Html.LabelFor(model => model.ToBankAccountId, "To Bank Account:", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
                 <div class="col-md-12">
                   @Html.DropDownList("ToBankAccountId", null, htmlAttributes: new { @class = "form-control" })
                   @Html.ValidationMessageFor(model => model.ToBankAccountId, "", new { @class = "text-danger" })
@@ -43,7 +43,7 @@
               </div>
 
               <div class="form-group">
-                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-10 text-success" })
+                @Html.LabelFor(model => model.Amount, "Amount to transfer:", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
                 <div class="col-md-12">
                   @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
                   @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
@@ -51,7 +51,7 @@
               </div>
 
               <div class="form-group">
-                @Html.LabelFor(model => model.Memo, htmlAttributes: new { @class = "control-label col-md-10 text-success" })
+                @Html.LabelFor(model => model.Memo, "Memo:", htmlAttributes: new { @class = "control-label col-md-10 text-success" })
                 <div class="col-md-12">
                   @Html.EditorFor(model => model.Memo, new { htmlAttributes = new { @class = "form-control" } })
                   @Html.ValidationMessageFor(model => model.Memo, "", new { @class = "text-danger" })

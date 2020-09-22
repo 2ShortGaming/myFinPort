@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Members";
     UserHelper userHelper = new UserHelper();
+    UserRolesHelper roleHelper = new UserRolesHelper();
 }
 
 
@@ -16,47 +17,45 @@
         </div>
         <div class="row justify-content-center">
           <div class="card-body col-11">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th class="text-success">
-                    @Html.DisplayNameFor(model => model.FirstName)
-                  </th>
-                  <th class="text-success">
-                    @Html.DisplayNameFor(model => model.LastName)
-                  </th>
-                  <th class="text-success">
-                    @Html.DisplayNameFor(model => model.Email)
-                  </th>
-                  <th class="text-success">
-                    @Html.DisplayNameFor(model => model.UserName)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach (var item in userHelper.GetUserList())
-                {
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
                   <tr>
-                    <td>
-                      <div class="col-2 user-img"><img src="@item.AvatarPath" class="img-circle img-responsive" /></div>
-                    </td>
-                    <td class="text-light">
-                      @item.FirstName
-                    </td>
-                    <td class="text-light">
-                      @item.LastName
-                    </td>
-                    <td class="text-light">
-                      @item.Email
-                    </td>
-                    <td class="text-light">
-                      @item.UserName
-                    </td>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th class="text-success">
+                      @Html.DisplayNameFor(model => model.UserName)
+                    </th>
                   </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @foreach (var item in userHelper.GetUserList().OrderBy(u => u.LastName))
+                  {
+                    <tr>
+                      <td class="text-light">
+                        @item.FirstName
+                      </td>
+                      <td class="text-light">
+                        @item.LastName
+                      </td>
+                      <td class="text-light">
+                        @item.Email
+                      </td>
+                      <td class="text-light">
+                        @item.UserName
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
