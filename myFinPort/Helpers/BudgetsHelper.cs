@@ -1,4 +1,5 @@
-﻿using myFinPort.Models;
+﻿using myFinPort.Extensions;
+using myFinPort.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,16 @@ namespace myFinPort.Helpers
             budgets.AddRange(db.Budgets);
 
             return budgets;
+        }
+
+        public List<Budget> ListHHBudgets()
+        {
+            var hhId = HttpContext.Current.User.Identity.GetHouseholdId();
+            List<Budget> hhBudgets = new List<Budget>();
+
+            hhBudgets = db.Budgets.Where(b => b.HouseholdId == hhId).ToList();
+
+            return hhBudgets;
         }
     }
 }

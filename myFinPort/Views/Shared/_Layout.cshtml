@@ -213,7 +213,7 @@
                 </li>
                 @if (budgetsHelper.BudgetsCount() > 0)
                 {
-                  foreach (var budget in budgetsHelper.ListBudgets())
+                  foreach (var budget in budgetsHelper.ListHHBudgets())
                   {
                     <li>
                       @Html.ActionLink(budget.BudgetName, "Details", "Budgets", new { Id = budget.Id }, null)
